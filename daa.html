@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>daa</title>
+</head>
+<body>
+<h3>selection sort
+</h3>
+import java.util.Random;<br>
+
+<br>public class SelectionSort {<br>
+    public static void selectionSort(int[] arr) {<br>
+        int n = arr.length;<br>
+        for (int i = 0; i < n - 1; i++) {<br>
+            int minIndex = i;<br>
+            for (int j = i + 1; j < n; j++) {<br>
+                if (arr[j] < arr[minIndex]) {<br>
+                    minIndex = j;<br>
+                }<br>
+            }<br>
+            int temp = arr[i];<br>
+            arr[i] = arr[minIndex];<br>
+            arr[minIndex] = temp;<br>
+        }<br>
+    }<br>
+
+<br>    public static void main(String[] args) {<br>
+        int[] nValues = {5000, 10000, 15000, 20000};<br>
+        double[] timeTaken = new double[nValues.length];<br>
+
+<br>        for (int i = 0; i < nValues.length; i++) {<br>
+            int n = nValues[i];<br>
+            int[] arr = new int[n];<br>
+            Random rand = new Random();<br>
+            for (int j = 0; j < n; j++) {<br>
+                arr[j] = rand.nextInt(100); <br>
+            }<br>
+
+<br>            long startTime = System.nanoTime();<br>
+            selectionSort(arr);<br>
+            long endTime = System.nanoTime();<br>
+
+<br>            timeTaken[i] = (endTime - startTime) / 1e9;<br>
+        }<br>
+
+<br>        System.out.println("n\tTime taken (seconds)");<br>
+        for (int i = 0; i < nValues.length; i++) {<br>
+            System.out.println(nValues[i] + "\t" + timeTaken[i]);<br>
+        }<br>
+    }<br>
+}<br>
+
+<br><h3>merge sort</h3><br>
+import java.util.Arrays;<br>
+import java.util.Random;<br>
+import java.util.Scanner;<br>
+public class MergeSort {<br>
+    void merge(int arr[], int l, int m, int r) {<br>
+        int n1 = m - l + 1;<br>
+        int n2 = r - m;<br>
+
+<br>        int L[] = new int[n1];<br>
+        int R[] = new int[n2];<br>
+
+<br>        for (int i = 0; i < n1; ++i)<br>
+            L[i] = arr[l + i];<br>
+        for (int j = 0; j < n2; ++j)<br>
+            R[j] = arr[m + 1 + j];<br>
+
+<br>        int i = 0, j = 0, k = l;<br>
+        while (i < n1 && j < n2) {<br>
+            if (L[i] <= R[j]) {<br>
+                arr[k] = L[i];<br>
+                i++;<br>
+            } else {<br>
+                arr[k] = R[j];<br>
+                j++;<br>
+            }<br>
+            k++;<br>
+        }<br>
+
+<br>        while (i < n1) {<br>
+            arr[k] = L[i];<br>
+            i++;<br>
+            k++;<br>
+        }<br>
+
+<br>        while (j < n2) {<br>
+            arr[k] = R[j];<br>
+            j++;<br>
+            k++;<br>
+        }<br>
+    }<br>
+
+<br>    void mergeSort(int arr[], int l, int r) {<br>
+        if (l < r) {<br>
+            int m = (l + r) / 2;<br>
+
+<br>            mergeSort(arr, l, m);<br>
+            mergeSort(arr, m + 1, r);<br>
+
+<br>            merge(arr, l, m, r);<br>
+        }<br>
+    }<br>
+
+<br>    public static void main(String args[]) {<br>
+        Random random = new Random();<br>
+        Scanner scanner = new Scanner(System.in);<br>
+
+<br>        System.out.print("Enter the number of arrays to sort: ");<br>
+        int numArrays = scanner.nextInt();<br>
+
+<br>        int[][] arrays = new int[numArrays][];<br>
+        long[] sortTimes = new long[numArrays];<br>
+
+<br>        for (int i = 0; i < numArrays; i++) {<br>
+            System.out.print("Enter the size of array " + (i + 1) + ": ");<br>
+            int n = scanner.nextInt();<br>
+
+<br>            int[] arr = new int[n];<br>
+            System.out.println("Generating " + n + " random elements for array " + (i + 1) + "...");<br>
+            for (int j = 0; j < n; j++)<br>
+                arr[j] = random.nextInt(10000);<br>
+
+<br>            arrays[i] = arr;<br>
+        }<br>
+
+<br>        System.out.println("Unsorted Array");<br>
+        for (int i = 0; i < numArrays; i++) <br>
+        	System.out.println("Array " + (i + 1) + ": " + Arrays.toString(arrays[i]));<br>
+        System.out.println("Sorting the arrays using Merge Sort...");<br>
+        long startTime = System.nanoTime();<br>
+        MergeSort ob = new MergeSort();<br>
+        for (int i = 0; i < numArrays; i++) {<br>
+            long arrayStartTime = System.nanoTime();<br>
+            ob.mergeSort(arrays[i], 0, arrays[i].length - 1);<br>
+            long arrayEndTime = System.nanoTime();<br>
+            sortTimes[i] = arrayEndTime - arrayStartTime;<br>
+        }<br>
+        long endTime = System.nanoTime();<br>
+
+<br>        System.out.println("Sorted Arrays:");<br>
+        for (int i = 0; i < numArrays; i++)<br>
+            System.out.println("Array " + (i + 1) + ": " + Arrays.toString(arrays[i]));<br>
+
+<br>        double totalTimeTaken = (endTime - startTime) / 1e9;<br>
+
+<br>        System.out.println("Time taken for sorting each array:");<br>
+        for (int i = 0; i < numArrays; i++)<br>
+            System.out.println("Array " + (i + 1) + ": " + (sortTimes[i] / 1e9) + " seconds");<br>
+
+<br>        scanner.close();<br>
+    }<br>
+}<br>
+<h3>quick sort</h3><br>
+import java.util.Arrays;<br>
+import java.util.Random;<br>
+import java.util.Scanner;<br>
+
+<br>public class QuickSort {<br>
+    int partition(int arr[], int low, int high) {<br>
+        int pivot = arr[high]; <br>
+        int i = (low - 1); <br>
+
+<br>        for (int j = low; j < high; j++) {<br>
+            if (arr[j] <= pivot) {<br>
+                i++;<br>
+
+<br>                swap(arr, i, j);<br>
+            }<br>
+        }<br>
+
+<br>        swap(arr, i + 1, high);<br>
+
+<br>        return i + 1;<br>
+    }<br>
+    static void swap(int[] arr, int i, int j)<br>
+    {<br>
+        int temp = arr[i];<br>
+        arr[i] = arr[j];<br>
+        arr[j] = temp;<br>
+    }<br>
+
+<br>    void quickSort(int arr[], int low, int high) {<br>
+        if (low < high) {<br>
+            int pi = partition(arr, low, high);<br>
+
+<br>            quickSort(arr, low, pi - 1);<br>
+            quickSort(arr, pi + 1, high);<br>
+        }<br>
+    }<br>
+
+<br>    public static void main(String args[]) {<br>
+    	Random random = new Random();<br>
+        Scanner scanner = new Scanner(System.in);<br>
+
+<br>        System.out.print("Enter the number of arrays to sort: ");<br>
+        int numArrays = scanner.nextInt();<br>
+
+<br>        int[][] arrays = new int[numArrays][];<br>
+        long[] sortTimes = new long[numArrays];<br>
+
+<br>        for (int i = 0; i < numArrays; i++) {<br>
+            System.out.print("Enter the size of array " + (i + 1) + ": ");<br>
+            int n = scanner.nextInt();<br>
+
+<br>            int[] arr = new int[n];<br>
+            System.out.println("Generating " + n + " random elements for array " + (i + 1) + "...");<br>
+            for (int j = 0; j < n; j++)<br>
+                arr[j] = random.nextInt(10000);<br>
+
+<br>            arrays[i] = arr;<br>
+        }<br>
+
+<br>        System.out.println("Unsorted Array");<br>
+        for (int i = 0; i < numArrays; i++) {<br>
+        	System.out.println("Array " + (i + 1) + ": " + Arrays.toString(arrays[i]));}<br>
+        System.out.println("Sorting the arrays using Merge Sort...");<br>
+        <br>
+        QuickSort ob = new QuickSort();<br>
+        for (int i = 0; i < numArrays; i++) {<br>
+            long arrayStartTime = System.nanoTime();<br>
+            ob.quickSort(arrays[i], 0, arrays[i].length - 1);<br>
+            long arrayEndTime = System.nanoTime();<br>
+            sortTimes[i] = arrayEndTime - arrayStartTime;<br>
+        }<br>
+        <br>
+
+<br>        System.out.println("Sorted Arrays:");<br>
+        for (int i = 0; i < numArrays; i++)<br>
+            System.out.println("Array " + (i + 1) + ": " + Arrays.toString(arrays[i]));<br>
+
+<br>        System.out.println("Time taken for sorting each array:");<br>
+        for (int i = 0; i < numArrays; i++)<br>
+            System.out.println("Array " + (i + 1) + ": " + (sortTimes[i] / 1e9) + " seconds");<br>
+
+<br>        scanner.close();<br>
+    }<br>
+}<br>
+<h3>kanpsack</h3><br>
+import java.util.*;<br>
+
+<br>class Item implements Comparable<Item> {<br>
+    int weight;<br>
+    int value;<br>
+
+<br>    public Item(int weight, int value) {<br>
+        this.weight = weight;<br>
+        this.value = value;<br>
+    }<br>
+
+<br>    public int compareTo(Item other) {<br>
+        double ratioThis = (double) value / weight;<br>
+        double ratioOther = (double) other.value / other.weight;<br>
+        return Double.compare(ratioOther, ratioThis);<br>
+    }<br>
+}<br>
+
+<br>public class KnapsackGreedy1 {<br>
+
+<br>    public static void knapsackGreedy(int capacity, List<Item> items) {<br>
+        Collections.sort(items);<br>
+
+<br>        int currentWeight = 0;<br>
+        double totalValue = 0;<br>
+
+<br>        for (Item item : items) {<br>
+            if (currentWeight + item.weight <= capacity) {<br>
+                currentWeight += item.weight;<br>
+                totalValue += item.value;<br>
+                System.out.println("Added item with weight: " + item.weight + " and value: " + item.value);<br>
+            } else {<br>
+                int remainingCapacity = capacity - currentWeight;<br>
+                double fraction = (double) remainingCapacity / item.weight;<br>
+                double partialValue = item.value * fraction;<br>
+                currentWeight += remainingCapacity;<br>
+                totalValue += partialValue;<br>
+                System.out.println("Added item with weight: " + remainingCapacity + " and value: " + partialValue + " (fractional)");<br>
+                break;<br>
+            }<br>
+        }<br>
+
+<br>        System.out.println("Total value in the knapsack: " + totalValue);<br>
+    }<br>
+
+<br>    public static void main(String[] args) {<br>
+        Scanner scanner = new Scanner(System.in);<br>
+
+<br>        System.out.print("Enter the capacity of the knapsack: ");<br>
+        int capacity = scanner.nextInt();<br>
+
+<br>        System.out.print("Enter the number of items: ");<br>
+        int n = scanner.nextInt();<br>
+
+<br>        List<Item> items = new ArrayList<>();<br>
+
+<br>        System.out.println("Enter weight and value for each item:");<br>
+        for (int i = 0; i < n; i++) {<br>
+            int weight = scanner.nextInt();<br>
+            int value = scanner.nextInt();<br>
+            items.add(new Item(weight, value));<br>
+        }<br>
+
+<br>        scanner.close();<br>
+
+<br>        knapsackGreedy(capacity, items);<br>
+    }<br>
+}<br>
+<h3>prim</h3><br>
+import java.util.Arrays;<br>
+public class MinimumSpanningTree {<br>
+    public static void primMST(int[][] graph) {<br>
+        int V = graph.length;   <br>
+        int[] parent = new int[V];<br>
+        int[] key = new int[V];<br>
+        boolean[] mstSet = new boolean[V];<br>
+
+<br>
+<br>        Arrays.fill(key, Integer.MAX_VALUE);<br>
+	key[0] = 0;<br>
+        parent[0] = -1;<br>
+
+<br>        for (int count = 0; count < V - 1; count++) {<br>
+            int u = -1;<br>
+            for (int v = 0; v < V; v++) {<br>
+                if (!mstSet[v] && (u == -1 || key[v] < key[u])) {<br>
+                    u = v;<br>
+                }<br>
+            }<br>
+
+<br>
+<br>            mstSet[u] = true;<br>
+
+<br>
+<br>            for (int v = 0; v < V; v++) {<br>
+                if (graph[u][v] != 0 && !mstSet[v] && graph[u][v] < key[v]) {<br>
+                    parent[v] = u;<br>
+                    key[v] = graph[u][v];<br>
+                }<br>
+            }<br>
+        }<br>
+
+<br>
+<br>        printMST(parent, graph);<br>
+    }<br>
+
+<br>
+<br>    public static void printMST(int[] parent, int[][] graph) {<br>
+        System.out.println("Edge   Weight");<br>
+        for (int v = 1; v < graph.length; v++) {<br>
+            System.out.println(parent[v] + " - " + v + "    " +   graph[v][parent[v]]);<br>
+        }<br>
+    }<br>
+
+<br>
+<br>    public static void main(String[] args) {<br>
+        int[][] graph = {<br>
+        		{0, 3, 0, 0, 6, 5},<br>
+                {3, 0, 1, 0, 0, 4},<br>
+                {0, 1, 0, 6, 0, 4},<br>
+                {0, 0, 6, 0, 8, 5},<br>
+                {6, 0, 0, 8, 0, 2},<br>
+                {5, 4, 4, 5, 2, 0}<br>
+        };<br>
+
+<br>
+<br>        primMST(graph);<br>
+    }<br>
+}<br>
+
+<br></body><br>
+</html><br>
