@@ -1,253 +1,242 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>python</title>
-</head>
-<body>
-	
-<h3>program1a</h3><br>
-# Python program to find the best of two test average marks out of <br>
-# three test's marks accepted from the user <br>
-m1 = (int)(input("Enter first test score "))<br>
-m2 = (int)(input("Enter second test score "))<br>
-m3 = (int)(input("Enter third test score "))<br>
-avg1 = (m1+m2)/2<br>
-avg2 = (m2+m3)/2<br>
-avg3 = (m1+m3)/2<br>
-print("Best of two average is ")<br>
-if avg1==avg2 and avg1==avg3:<br>
-    print(avg1)<br>
-elif avg1>avg2 and avg1>avg3:<br>
-    print(avg1)<br>
-elif avg2>avg1 and avg2>avg3:<br>
-    print(avg2)<br>
-else:<br>
-    print(avg3)<br>
-<h3>program1b</h3><br>
-num = int(input("Enter your number: "))<br>
-temp = num<br>
-reverse = 0<br>
-is_palindrome = True<br>
-unique_digits = set() #it store the unique digits present in the input number<br>
-<br>
-while num > 0:<br>
-    dig = num % 10<br>
-    reverse = reverse * 10 + dig<br>
-    unique_digits.add(dig)<br>
-    num = num //<br>
-if temp == reverse:<br>
-    print("Number is a palindrome.")<br>
-    for digit in unique_digits:<br>
-        print("Unique digit:", digit)<br>
-        count = str(temp).count(str(digit))<br>
-        print("Count:", count)<br>
-else:<br>
-    print("Number is not a palindrome.")<br>
-<h3>program2a</h3><br>
-def fib(n):<br>
-    if n == 0:<br>
-        return 0<br>
-    elif n == 1:<br>
-        return 1<br>
-    else:<br>
-        return fib(n - 1) + fib(n - 2) <br>
-n = int(input("Enter the n value: ")) #4<br>
-for i in range(n + 1): # 0 to 5<br>
-    print(fib(i),end="  ")<br>
-<h3>program2b</h3><br>
-#python program to convert binary to devimal, octal to hexadecimal using functions.<br>
-def bin_to_deci(n, b):<br>
-    d = 0<br>
-    p = 0<br>
-    while n > 0:<br>
-        d1 = n % 10<br>
-        d = d + (d1 * (b ** p))<br>
-        p = p + 1<br>
-        n = n // 10<br>
-    return d<br>
-<br>
-def oct_to_hexa(n, b):<br>
-    hexa = ""<br>
-    decimal = bin_to_deci(n, 8)  # Corrected function name here<br>
-    hexachar = "0123456789ABCDEF"<br>
-    while decimal > 0:<br>
-        d = decimal % 16<br>
-        h = hexachar[d]<br>
-        decimal = decimal // 16<br>
-        hexa = h + hexa<br>
-    return hexa<br>
-<br>
-while True:<br>
-    print("Enter Your Choice: ")<br>
-    ch = int(input("\n1.Binary to Decimal\n2.Octal to Hexadecimal\n3.EXIT\n"))<br>
-    if ch == 1:<br>
-        binary = int(input("Enter a Binary number: "))<br>
-        res1 = bin_to_deci(binary, 2)<br>
-        print(str(res1))<br>
-    elif ch == 2:<br>
-        octal = int(input("Enter an Octal Number: "))  # Corrected grammar<br>
-        res2 = oct_to_hexa(octal, 8)<br>
-        print(str(res2))<br>
-    else:<br>
-        print("EXIT !")<br>
-        exit()<br>
-<h3>program3a</h3><br>
-# Python program tha accepts a sentence and <br>
-# find the number of words, digits, uppercase letters and lowwercase letters<br>
-s1 = input("Enter a sentence\n")<br>
-s2 = s1.split()<br>
-dgt = 0<br>
-upr = 0<br>
-lwr = 0<br>
-for i in s1:<br>
-    if(i.isdigit()):#build in fuctions<br>
-        dgt += 1#dgt=dgt+1<br>
-    elif(i.isupper()):<br>
-        upr += 1<br>
-    elif(i.islower()):<br>
-        lwr += 1<br>
-print("Word Count: ",len(s2))<br>
-print("Digit Count: ",dgt)<br>
-print("Uppercase Count: ",upr)<br>
-print("Lowercase Count: ",lwr)<br>
-<h3>program3b</h3><br>
-#Python program to find the string similarity between two given strings<br>
-from difflib import SequenceMatcher<br>
-def similarity(str1,str2):<br>
-    similarity_ratio = SequenceMatcher(None,str1,str2).ratio()<br>
-    return similarity_ratio<br>
-s1 = input("Enter the first string:\n ")<br>
-s2 = input("Enter the second string:\n ")<br>
-print("String 1: ",s1)<br>
-print("String 2: ",s2)<br>
-print("Similarity: ",similarity(s1,s2))<br>
-<h3>program4a</h3><br>
-#python program to implement insertion sort and merge sort using list<br>
-def insertion_sort(arr):<br>
-    for i in range(1, len(arr)):<br>
-        key = arr[i]<br>
-        j = i - 1<br>
-        while j >= 0 and key < arr[j]:<br>
-            arr[j + 1] = arr[j]<br>
-            j -= 1<br>
-        arr[j + 1] = key<br>
-    return arr<br>
-<br>
-def merge_sort(arr):<br>
-    if len(arr) <= 1:<br>
-        return arr<br>
-<br>
-    mid = len(arr) // 2<br>
-    left_half = arr[:mid]<br>
-    right_half = arr[mid:]<br>
-<br>
-    left_half = merge_sort(left_half)<br>
-    right_half = merge_sort(right_half)<br>
-<br>
-    result = []<br>
-    left_index, right_index = 0, 0<br>
-<br>
-    while left_index < len(left_half) and right_index < len(right_half):<br>
-        if left_half[left_index] < right_half[right_index]:<br>
-            result += [left_half[left_index]]<br>
-            left_index += 1<br>
-        else:<br>
-            result += [right_half[right_index]]<br>
-            right_index += 1<br>
-<br>
-    while left_index < len(left_half):<br>
-        result += [left_half[left_index]]<br>
-        left_index += 1<br>
-<br>
-    while right_index < len(right_half):<br>
-        result += [right_half[right_index]]<br>
-        right_index += 1<br>
-    return result<br>
-<br>
-<br>
-arr = [66,89,1,45,3,23,11]<br>
-print("Array Before Sorting :",arr)<br>
-print("Insertion Sort Result:",insertion_sort(arr) )<br>
-print("Merge Sort Result    :",merge_sort(arr))<br>
-<h3>program4b</h3><br>
-# Write a program to convert roman numbers to integer values using dictionaries.<br>
-def roman_to_int(roman):<br>
-    roman_numerals = {<br>
-        'I': 1, 'V': 5, 'X': 10, 'L': 50,<br>
-        'C': 100, 'D': 500, 'M': 1000<br>
-    }<br>
-<br>
-    total = 0<br>
-    prev = 0<br>
-<br>
-    for char in roman:<br>
-        value = roman_numerals[char]<br>
-        if value > prev:<br>
-            total += value - 2 * prev#total=total+value-3<br>
-        else:<br>
-            total += value<br>
-        prev = value<br>
-<br>
-    return total<br>
-<br>
-<br>
-romanNumber = input("Enter a Roman Number: ")<br>
-integerValue = roman_to_int(romanNumber.upper())<br>
-print("Integer value:", integerValue)<br>
-<h3>program5a</h3><br>
-# write a function called isphonenumber 0 to recognize a pattern 415-555-4242 without<br>
-# using regular expression and also write the code to recognize the same pattern using<br>
-# regular expression.<br>
-def isPhoneNumber(text):<br>
-    if len(text) != 12:<br>
-        return False<br>
-    for i in range(0, 3):<br>
-        if not text[i].isnumeric():<br>
-            return False<br>
-    if text[3] != '-':<br>
-        return False <br>
-    for i in range(4, 7):<br>
-        if not text[i].isnumeric():<br>
-            return False<br>
-    if text[7] != '-':<br>
-        return False<br>
-    for i in range(8, 12):<br>
-        if not text[i].isnumeric():<br>
-            return False<br>
-    return True<br>
-<br>
-phone_number = input("Enter a Phone NUmber: \n")<br>
-if isPhoneNumber(phone_number):<br>
-    print("Phone number is Valid !")<br>
-else:<br>
-    print("Phone number is Invalid !")<br>
-<h3>program5b</h3><br>
-import re<br>
-<br>
-def find_patterns(pattern, text):<br>
-    return re.findall(pattern, text, re.IGNORECASE)<br>
-<br>
-file_path = "phone.txt"<br>
-<br>
-try:<br>
-    with open(file_path, 'r') as file:<br>
-        text = file.read()<br>
-<br>
-        phone_numbers = find_patterns(r'\+\d{11}', text)<br>
-        email_addresses = find_patterns(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b', text)<br>
-<br>
-        print("Phone numbers found:")<br>
-        print('\n'.join(phone_numbers))<br>
-<br>
-        print("\nEmail addresses found:")<br>
-        print('\n'.join(email_addresses))<br>
-<br>
-except FileNotFoundError:<br>
-    print("File not found!")<br>
-<br>
 
-</script>
-</body>
-</html>
+<pre><h3>program1a</h3>
+# Python program to find the best of two test average marks out of 
+# three test's marks accepted from the user 
+m1 = (int)(input("Enter first test score "))
+m2 = (int)(input("Enter second test score "))
+m3 = (int)(input("Enter third test score "))
+avg1 = (m1+m2)/2
+avg2 = (m2+m3)/2
+avg3 = (m1+m3)/2
+print("Best of two average is ")
+if avg1==avg2 and avg1==avg3:
+    print(avg1)
+elif avg1>avg2 and avg1>avg3:
+    print(avg1)
+elif avg2>avg1 and avg2>avg3:
+    print(avg2)
+else:
+    print(avg3)
+<h3>program1b</h3>
+num = int(input("Enter your number: "))
+temp = num
+reverse = 0
+is_palindrome = True
+unique_digits = set() #it store the unique digits present in the input number
+
+while num > 0:
+    dig = num % 10
+    reverse = reverse * 10 + dig
+    unique_digits.add(dig)
+    num = num //
+if temp == reverse:
+    print("Number is a palindrome.")
+    for digit in unique_digits:
+        print("Unique digit:", digit)
+        count = str(temp).count(str(digit))
+        print("Count:", count)
+else:
+    print("Number is not a palindrome.")
+<h3>program2a</h3>
+def fib(n):
+    if n == 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        return fib(n - 1) + fib(n - 2) 
+n = int(input("Enter the n value: ")) #4
+for i in range(n + 1): # 0 to 5
+    print(fib(i),end="  ")
+<h3>program2b</h3>
+#python program to convert binary to devimal, octal to hexadecimal using functions.
+def bin_to_deci(n, b):
+    d = 0
+    p = 0
+    while n > 0:
+        d1 = n % 10
+        d = d + (d1 * (b ** p))
+        p = p + 1
+        n = n // 10
+    return d
+
+def oct_to_hexa(n, b):
+    hexa = ""
+    decimal = bin_to_deci(n, 8)  # Corrected function name here
+    hexachar = "0123456789ABCDEF"
+    while decimal > 0:
+        d = decimal % 16
+        h = hexachar[d]
+        decimal = decimal // 16
+        hexa = h + hexa
+    return hexa
+
+while True:
+    print("Enter Your Choice: ")
+    ch = int(input("\n1.Binary to Decimal\n2.Octal to Hexadecimal\n3.EXIT\n"))
+    if ch == 1:
+        binary = int(input("Enter a Binary number: "))
+        res1 = bin_to_deci(binary, 2)
+        print(str(res1))
+    elif ch == 2:
+        octal = int(input("Enter an Octal Number: "))  # Corrected grammar
+        res2 = oct_to_hexa(octal, 8)
+        print(str(res2))
+    else:
+        print("EXIT !")
+        exit()
+<h3>program3a</h3>
+# Python program tha accepts a sentence and 
+# find the number of words, digits, uppercase letters and lowwercase letters
+s1 = input("Enter a sentence\n")
+s2 = s1.split()
+dgt = 0
+upr = 0
+lwr = 0
+for i in s1:
+    if(i.isdigit()):#build in fuctions
+        dgt += 1#dgt=dgt+1
+    elif(i.isupper()):
+        upr += 1
+    elif(i.islower()):
+        lwr += 1
+print("Word Count: ",len(s2))
+print("Digit Count: ",dgt)
+print("Uppercase Count: ",upr)
+print("Lowercase Count: ",lwr)
+<h3>program3b</h3>
+#Python program to find the string similarity between two given strings
+from difflib import SequenceMatcher
+def similarity(str1,str2):
+    similarity_ratio = SequenceMatcher(None,str1,str2).ratio()
+    return similarity_ratio
+s1 = input("Enter the first string:\n ")
+s2 = input("Enter the second string:\n ")
+print("String 1: ",s1)
+print("String 2: ",s2)
+print("Similarity: ",similarity(s1,s2))
+<h3>program4a</h3>
+#python program to implement insertion sort and merge sort using list
+def insertion_sort(arr):
+    for i in range(1, len(arr)):
+        key = arr[i]
+        j = i - 1
+        while j >= 0 and key < arr[j]:
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = key
+    return arr
+
+def merge_sort(arr):
+    if len(arr) <= 1:
+        return arr
+
+    mid = len(arr) // 2
+    left_half = arr[:mid]
+    right_half = arr[mid:]
+
+    left_half = merge_sort(left_half)
+    right_half = merge_sort(right_half)
+
+    result = []
+    left_index, right_index = 0, 0
+
+    while left_index < len(left_half) and right_index < len(right_half):
+        if left_half[left_index] < right_half[right_index]:
+            result += [left_half[left_index]]
+            left_index += 1
+        else:
+            result += [right_half[right_index]]
+            right_index += 1
+
+    while left_index < len(left_half):
+        result += [left_half[left_index]]
+        left_index += 1
+
+    while right_index < len(right_half):
+        result += [right_half[right_index]]
+        right_index += 1
+    return result
+
+
+arr = [66,89,1,45,3,23,11]
+print("Array Before Sorting :",arr)
+print("Insertion Sort Result:",insertion_sort(arr) )
+print("Merge Sort Result    :",merge_sort(arr))
+<h3>program4b</h3>
+# Write a program to convert roman numbers to integer values using dictionaries.
+def roman_to_int(roman):
+    roman_numerals = {
+        'I': 1, 'V': 5, 'X': 10, 'L': 50,
+        'C': 100, 'D': 500, 'M': 1000
+    }
+
+    total = 0
+    prev = 0
+
+    for char in roman:
+        value = roman_numerals[char]
+        if value > prev:
+            total += value - 2 * prev#total=total+value-3
+        else:
+            total += value
+        prev = value
+
+    return total
+
+
+romanNumber = input("Enter a Roman Number: ")
+integerValue = roman_to_int(romanNumber.upper())
+print("Integer value:", integerValue)
+<h3>program5a</h3>
+# write a function called isphonenumber 0 to recognize a pattern 415-555-4242 without
+# using regular expression and also write the code to recognize the same pattern using
+# regular expression.
+def isPhoneNumber(text):
+    if len(text) != 12:
+        return False
+    for i in range(0, 3):
+        if not text[i].isnumeric():
+            return False
+    if text[3] != '-':
+        return False 
+    for i in range(4, 7):
+        if not text[i].isnumeric():
+            return False
+    if text[7] != '-':
+        return False
+    for i in range(8, 12):
+        if not text[i].isnumeric():
+            return False
+    return True
+
+phone_number = input("Enter a Phone NUmber: \n")
+if isPhoneNumber(phone_number):
+    print("Phone number is Valid !")
+else:
+    print("Phone number is Invalid !")
+<h3>program5b</h3>
+import re
+
+def find_patterns(pattern, text):
+    return re.findall(pattern, text, re.IGNORECASE)
+
+file_path = "phone.txt"
+
+try:
+    with open(file_path, 'r') as file:
+        text = file.read()
+
+        phone_numbers = find_patterns(r'\+\d{11}', text)
+        email_addresses = find_patterns(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b', text)
+
+        print("Phone numbers found:")
+        print('\n'.join(phone_numbers))
+
+        print("\nEmail addresses found:")
+        print('\n'.join(email_addresses))
+
+except FileNotFoundError:
+    print("File not found!")
+</pre>
+
