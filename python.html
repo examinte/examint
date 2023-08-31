@@ -238,5 +238,300 @@ try:
 
 except FileNotFoundError:
     print("File not found!")
+<h3>program6a</h3>
+#  python program to accept a file name from the user and perform the following
+# operations
+# 1. Display the first N line of the file
+# 2. Find the frequency of occurrence of the word accepted from the user in the
+# filed
+def display_first_n_lines(file_name, n):
+    try:
+        with open(file_name, 'r') as file:
+            for _ in range(n):
+                line = file.readline()
+                if not line:
+                    break
+                print(line, end='')
+    except FileNotFoundError:
+        print("File not found.")
+
+def count_word_frequency(file_name, word):
+    try:
+        with open(file_name, 'r') as file:
+            content = file.read()
+            word_count = content.lower().count(word.lower())
+            print(f"The word '{word}' appears {word_count} times in the file.")
+    except FileNotFoundError:
+        print("File not found.")
+
+file_name = input("Enter the file name: ")
+
+try:
+    n = int(input("Enter the number of lines to display: "))
+    display_first_n_lines(file_name, n)
+    
+    word_to_find = input("Enter the word to find frequency: ")
+    count_word_frequency(file_name, word_to_find)
+except ValueError:
+    print("Invalid input. Please enter a valid number.")
+<h3>program6b</h3>
+import os
+import zipfile
+
+def create_zip(folder_path, zip_file_path):
+    with zipfile.ZipFile(zip_file_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        for root, _, files in os.walk(folder_path):
+            for file in files:
+                file_path = os.path.join(root, file)
+                zipf.write(file_path, os.path.relpath(file_path, folder_path))
+
+def extract_zip(zip_file_path, extract_folder_path):
+    is_exist = os.path.exists(extract_folder_path)
+    if not is_exist:
+        os.makedirs(extract_folder_path)
+        
+    with zipfile.ZipFile(zip_file_path, 'r') as example_zip:
+        example_zip.extractall(extract_folder_path)
+        print("Files extracted successfully.")
+
+if __name__ == "__main__":
+    folder_path = "C:/Users/HP/Documents/pythonprogram/xkcd_comics"
+    zip_file_path = "C:/Users/HP/Documents/pythonprogram/xkcd_comics.zip"
+    extract_folder_path = "C:/Users/HP/Documents/pythonprogram/xkcd_extracted"
+    
+    create_zip(folder_path, zip_file_path)
+    print("Zip file created successfully.")
+    
+    extract_zip(zip_file_path, extract_folder_path)
+
+<h3>program7a</h3>
+# By using the concept of inheritance write a python program to find the area of triangle,
+# circle and rectangle.
+import math
+class Shape:
+    def area(self):
+        pass
+
+class Triangle(Shape):
+    def area(self, base, height):
+        return 0.5 * base * height
+
+class Circle(Shape):
+    def area(self, radius):
+        return math.pi * radius ** 2
+
+class Rectangle(Shape):
+    def area(self, length, width):
+        return length * width
+
+triangle = Triangle()
+circle = Circle()
+rectangle = Rectangle()
+
+print("Area of Triangle:", triangle.area(10, 5))
+print("Area of Circle:", circle.area(7))
+print("Area of Rectangle:", rectangle.area(8, 6))
+<h3>program7b</h3>
+# Write a python program by creating a class called Employee to store the details of
+# name, Employee_ID, Department and Salary, and implement a method to update salary
+# of employees belonging to a given department.
+class Employee:
+    def create_employee(self, name, employee_id, department, salary):
+        self.name = name
+        self.employee_id = employee_id
+        self.department = department
+        self.salary = salary
+        
+    def update_salary(self, new_salary):
+        self.salary = new_salary
+        
+    def display_details(self):
+        print("Name:", self.name)
+        print("Employee ID:", self.employee_id)
+        print("Department:", self.department)
+        print("Salary:", self.salary)
+        print("=" * 20)
+
+employee1 = Employee()
+employee1.create_employee("Name1", "ID1", "AD", 50000)
+
+employee2 = Employee()
+employee2.create_employee("Name2", "ID2", "CS", 60000)
+
+employee3 = Employee()
+employee3.create_employee("Name3", "ID3", "AM", 55000)
+
+print("\nEmployees before salary update:\n")
+employee1.display_details()
+employee2.display_details()
+employee3.display_details()
+
+employee2.update_salary(65000)
+
+print("\nEmployees after salary update:\n")
+employee1.display_details()
+employee2.display_details()
+employee3.display_details()
+<h3>program8</h3>
+# Write a python program to find the whether the given input is palindrome or not (for
+# both string and integer) using the concept of polymorphism and inheritance.
+class PalindromeChecker:
+    def is_palindrome(self, value):
+        pass
+
+class StringPalindrome(PalindromeChecker):
+    def is_palindrome(self, value):
+        cleaned_value = value.lower().replace(" ", "")  
+        return cleaned_value == cleaned_value[::-1]  
+
+class IntegerPalindrome(PalindromeChecker):
+    def is_palindrome(self, value):
+        return str(value) == str(value)[::-1]  
+
+def check_palindrome(palindrome_checker, value):
+    if palindrome_checker.is_palindrome(value):
+        return f"'{value}' is a palindrome."
+    else:
+        return f"'{value}' is not a palindrome."
+
+input_string = input("Enter a string: ")
+input_integer = int(input("Enter an integer: "))
+
+string_checker = StringPalindrome()
+integer_checker = IntegerPalindrome()
+
+print(check_palindrome(string_checker, input_string))
+print(check_palindrome(integer_checker, input_integer))
+<h3>program9a</h3>
+# Write a python program to download the all XKCD comics
+import os
+import requests
+from bs4 import BeautifulSoup
+import urllib
+
+if not os.path.exists('xkcd_comics'):
+    os.makedirs('xkcd_comics')
+
+base_url = 'https://xkcd.com/'
+
+response = requests.get(base_url)
+soup = BeautifulSoup(response.text, 'html.parser')
+latest_comic_num = int(soup.find('div', id='middleContainer').find('a', rel='prev')['href'][1:-1])
+
+for comic_num in range(1, latest_comic_num + 1):
+    url = base_url + str(comic_num)
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    img_url = soup.find('div', id='comic').find('img')['src']
+    img_url = 'https:' + img_url if img_url.startswith('//') else img_url
+    img_name = img_url.split('/')[-1]
+    img_path = os.path.join('xkcd_comics', img_name)
+
+    urllib.request.urlretrieve(img_url, img_path)
+    print(f"Downloaded comic {comic_num}: {img_name}")
+
+<h3>program9b</h3>
+# Demonstrate python program to read the data from the spreadsheet and 
+# write the data in to the spreadsheet.
+
+import openpyxl
+path = "C:/Users/HP/Documents/pythonprogram/Data.xlsx"
+wb_obj = openpyxl.load_workbook(path)
+sheet_obj = wb_obj.active
+
+cell_obj = sheet_obj.cell(row = 1, column = 1)
+print(cell_obj.value)
+print("Total Rows:",sheet_obj.max_row)
+print("Total Columns:",sheet_obj.max_column)
+print("\nValue of first column")
+for i in range(1,8):
+    cell_obj = sheet_obj.cell(row=i,column=1)
+    print(cell_obj.value)
+print("\nValue of first row")
+for i in range(1,4):
+    cell_obj = sheet_obj.cell(row=2,column=i)
+    print(cell_obj.value,end="")
+
+from openpyxl import Workbook
+wb = Workbook()
+sheet = wb.active
+c1 = sheet.cell(row = 1, column = 1)
+c1.value = "Hello"
+c2 = sheet.cell(row=1,column = 2)
+c2.value = "World"
+wb.save(filename = "sample.xlsx")
+
+c3 = sheet['A2']
+c3.value = "Welcome"
+c4 = sheet['B2']
+c4.value = "Everyone"
+wb.save("sample.xlsx")
+c = sheet["A3"]
+c.value = "New Data"
+wb.save("sample.xlsx")
+data=(
+    (1,2,3),
+    (4,5,6)
+)
+for row in data:
+    sheet.append(row)
+wb.save("sample.xlsx")
+sheet['D1']=200
+sheet['D2']=300
+sheet['D3']=400
+sheet['D4']=500
+sheet['D5']=600
+sheet['D7']='=SUM(D1:D5)'
+wb.save("sum.xlsx")
+<h3>program10a</h3>
+# Write a python program to combine select pages from many PDFs
+    
+import PyPDF2
+pdf1File = open("ENZYMES.pdf",'rb')
+pdf2File = open("eye as camera.pdf",'rb')
+pdf1Reader = PyPDF2.PdfReader(pdf1File) 
+pdf2Reader = PyPDF2.PdfReader(pdf2File)
+pdfWriter = PyPDF2.PdfWriter()
+l1 = [1,2,5,7] 
+l2 = [4,6,8,9]
+for i in range(len(l1)):
+    pageObj = pdf1Reader.pages[l1[i]]
+    pdfWriter.add_page(pageObj)
+for i in range(len(l2)):
+    pageObj = pdf2Reader.pages[l2[i]]
+    pdfWriter.add_page(pageObj)
+pdfOutputFile = open("PDFCombined.pdf",'wb')
+pdfWriter.write(pdfOutputFile)
+pdfOutputFile.close()
+pdf1File.close()
+pdf2File.close()
+<h3>program10b</h3>
+# Write a python program to fetch current weather data from the JSON file
+import requests, json
+BASE_URL = "https://api.openweathermap.org/data/2.5/weather?"
+CITY = "Mangalore"
+API_KEY = "169a5729660452a11467f320ac5ebba0"
+URL = BASE_URL + "q=" + CITY + "&appid=" + API_KEY
+response = requests.get(URL)
+print(response.status_code)
+if response.status_code == 200:
+    data = response.json()
+    main = data['main']
+    temperature = main['temp']
+    temp_feel_like = main['feels_like']
+    humidity = main['humidity']
+    pressure = main['pressure']
+
+    weather_report = data['weather']
+    wind_report = data['wind']
+    print(f'{CITY:-^35}')
+    print(f'CITY ID: {data["id"]}')
+    print(f"Temperature: {temperature} Farenheit")
+    print(f'Feels Like: {temp_feel_like} Farenheit')
+    print(f'Humidity: {humidity}')
+    print(f'Pressure: {pressure}')
+    print(f'Weather Report:\n{weather_report}')
+    print(f'Wind Report:\n{wind_report}')
+
 </pre>
 
