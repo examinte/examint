@@ -533,5 +533,219 @@ if response.status_code == 200:
     print(f'Weather Report:\n{weather_report}')
     print(f'Wind Report:\n{wind_report}')
 
+
+<h2>PartB</h2>
+        <h3>program1</h3>
+        def factorial(n):
+    if n == 0:
+        return 1
+    else:
+        return n * factorial(n - 1)
+
+# Function to compute NCR (combination)
+def ncr(n, r):
+    if n < r:
+        return 0
+    else:
+        return factorial(n) // (factorial(r) * factorial(n - r))
+
+# Input N and R from the user
+n = int(input("Enter the value of N: "))
+r = int(input("Enter the value of R: "))
+
+# Calculate and print NCR
+result = ncr(n, r)
+print(f"{n}C{r} is {result}")
+        <h3>program2</h3>
+        import math
+
+# Function to calculate the mean of a list of numbers
+def calculate_mean(numbers):
+    if len(numbers) == 0:
+        return 0
+    return sum(numbers) / len(numbers)
+
+# Function to calculate the variance of a list of numbers
+def calculate_variance(numbers):
+    mean = calculate_mean(numbers)
+    return sum((x - mean) ** 2 for x in numbers) / len(numbers)
+
+# Function to calculate the standard deviation of a list of numbers
+def calculate_standard_deviation(numbers):
+    variance = calculate_variance(numbers)
+    return math.sqrt(variance)
+
+# Input the number of values (N)
+N = int(input("Enter the number of values (N): "))
+numbers_list = []
+
+# Read N numbers from the console
+for i in range(N):
+    num = float(input(f"Enter value {i + 1}: "))
+    numbers_list.append(num)
+
+# Calculate mean, variance, and standard deviation
+mean = calculate_mean(numbers_list)
+variance = calculate_variance(numbers_list)
+std_deviation = calculate_standard_deviation(numbers_list)
+
+# Print the results with suitable messages
+print(f"Mean: {mean}")
+print(f"Variance: {variance}")
+print(f"Standard Deviation: {std_deviation}")
+
+
+        <h3>program3</h3>
+
+
+        def DivExp(a, b):
+    assert a > 0, "a must be greater than 0"
+    if b == 0:
+        raise ValueError("Division by zero is not allowed")
+    c = a / b
+    return c
+
+try:
+    a = float(input("Enter the value of 'a': "))
+    b = float(input("Enter the value of 'b': "))
+    result = DivExp(a, b)
+    print(f"Result of {a} / {b} is {result}")
+except ValueError as e:
+    print(f"Error: {e}")
+except AssertionError as e:
+    print(f"Assertion Error: {e}")
+
+        <h3>program4</h3>
+        class Complex:
+    def init(self, real, imaginary):
+        self.real = real
+        self.imaginary = imaginary
+
+    def add(self, other):
+        # Add two complex numbers
+        real_sum = self.real + other.real
+        imaginary_sum = self.imaginary + other.imaginary
+        return Complex(real_sum, imaginary_sum)
+
+    def str(self):
+        return f"{self.real} + {self.imaginary}i"
+
+# Function to read N complex numbers and compute their sum
+def compute_complex_sum(N):
+    if N < 2:
+        print("N must be greater than or equal to 2.")
+        return
+
+    # Initialize the sum with the first complex number
+    complex_sum = Complex(0, 0)
+    for i in range(N):
+        real = float(input(f"Enter the real part of complex number {i + 1}: "))
+        imaginary = float(input(f"Enter the imaginary part of complex number {i + 1}: "))
+        complex_number = Complex(real, imaginary)
+        complex_sum += complex_number
+
+    return complex_sum
+
+# Input the value of N
+N = int(input("Enter the number of complex numbers (N >= 2): "))
+
+# Compute the sum of N complex numbers
+result = compute_complex_sum(N)
+
+if result:
+    print(f"Sum of the {N} complex numbers is: {result}")
+        <h3>program5</h3>
+
+        class Student:
+    def init(self, name):
+        self.name = name
+        self.marks = []
+
+    def input_marks(self):
+        print(f"Enter marks for {self.name}:")
+        for subject in range(3):
+            mark = float(input(f"Enter mark for subject {subject + 1}: "))
+            self.marks.append(mark)
+
+    def calculate_total(self):
+        return sum(self.marks)
+
+    def calculate_percentage(self):
+        total_marks = self.calculate_total()
+        return (total_marks / (3 * 100)) * 100
+
+    def display_scorecard(self):
+        total_marks = self.calculate_total()
+        percentage = self.calculate_percentage()
+
+        print(f"\nScorecard for {self.name}:")
+        print("Subject\t\tMarks")
+        print("---------------------")
+        for subject, mark in enumerate(self.marks, start=1):
+            print(f"Subject {subject}\t{mark}")
+        print("---------------------")
+        print(f"Total Marks:\t{total_marks}")
+        print(f"Percentage:\t{percentage:.2f}%")
+
+# Input student name
+student_name = input("Enter student's name: ")
+
+# Create a Student object
+student = Student(student_name)
+
+# Input marks and display scorecard
+student.input_marks()
+student.display_scorecard()
+        <h3>program6</h3>
+        import re
+
+def validate_usn(usn):
+    pattern = r"^[1-9][A-Z]{2}\d{2}[A-Z]{2}\d{3}$"
+    if re.match(pattern, usn):
+        return True
+    else:
+        return False
+
+usn = input("Enter a USN: ")
+if validate_usn(usn):
+    print("Valid USN")
+else:
+    print("Invalid USN")
+    
+    
+    
+    import re
+
+def validate_pan(pan):
+    pattern = r"^[A-Z]{5}[0-9]{4}[A-Z]{1}$"
+    if re.match(pattern, pan):
+        return True
+    else:
+        return False
+
+pan = input("Enter a PAN: ")
+if validate_pan(pan):
+    print("Valid PAN")
+else:
+    print("Invalid PAN")
+    
+    
+    
+    
+    import re
+
+def validate_number_plate(number_plate):
+    pattern = r"^[A-Z0-9]{1,7}$"
+    if re.match(pattern, number_plate):
+        return True
+    else:
+        return False
+
+number_plate = input("Enter a number plate: ")
+if validate_number_plate(number_plate):
+    print("Valid Number Plate")
+else:
+    print("Invalid Number Plate")
+        
 </pre>
 
