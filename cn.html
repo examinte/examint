@@ -127,11 +127,11 @@ else
 
 <h1>program3-leakytest</h1>
 
-package CNpro;
+package cn;
 import java.util.Scanner;
-public class Leaky_test extends Thread{
-    public static void main(String[] args) {
-        // TODO Auto-generated method stub
+public class leaky extends Thread{
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
  int n,rate,size;
  Scanner sc=new Scanner(System.in);
  System.out.println("enter the number of packet:");
@@ -143,43 +143,43 @@ public class Leaky_test extends Thread{
  System.out.println("enter the packet size:");
  int[] packets=new int[n];
  for(int i=0;i<n;i++) {
-     packets[i]=sc.nextInt();
+	 packets[i]=sc.nextInt();
  }
  System.out.println("\nclock\tsize\tstatus\t\tsent\tremaing");
  int rem=0,sent=0;
  for(int i=0;i<n;i++) {
-    try {
-        Thread.sleep(1500);
-    }
-    catch(InterruptedException e) {
-        e.printStackTrace();
-    }
+	try {
+		Thread.sleep(1500);
+	}
+	catch(InterruptedException e) {
+		e.printStackTrace();
+	}
 
-    if((rem+packets[i])>size) {
-        if(rem>=rate) {
-            rem-=rate;
-            sent=rate;
-        }
-        else {
-            sent=rem;
-            rem=0;
-        }
-         System.out.println(i+1+"\t"+packets[i]+"\tDropped\t"+"\t"+sent+"\t"+rem+"\n");
-    }
-    else {
-        rem+=packets[i];
-        if(rem>=rate) {
-            rem-=rate;
-            sent=rate;
-        }
-        else {
-            sent=rem;
-            rem=0;
-        }
-        System.out.println(i+1+"\t"+packets[i]+"\tAccepted\t"+sent+"\t"+rem+"\n");
-    }
+	if((rem+packets[i])>size) {
+		if(rem>=rate) {
+			rem-=rate;
+			sent=rate;
+		}
+		else {
+			sent=rem;
+			rem=0;
+		}
+		 System.out.println(i+1+"\t"+packets[i]+"\tDropped\t"+"\t"+sent+"\t"+rem+"\n");
+	}
+	else {
+		rem+=packets[i];
+		if(rem>=rate) {
+			rem-=rate;
+			sent=rate;
+		}
+		else {
+			sent=rem;
+			rem=0;
+		}
+		System.out.println(i+1+"\t"+packets[i]+"\tAccepted\t"+sent+"\t"+rem+"\n");
+	}
  }
-    }
+	}
 
 }
 </pre>
