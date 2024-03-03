@@ -1,0 +1,654 @@
+<pre>
+	<h1>program1</h1>
+
+using System;
+
+class neww2
+{
+    static void Main()
+    {
+        Console.WriteLine("Simple Calculator");
+        Console.WriteLine("------------------");
+        Console.WriteLine("Enter the first number:");
+        double num1 = Convert.ToDouble(Console.ReadLine());
+        Console.WriteLine("The first number is: " + num1);
+        Console.WriteLine("Enter the second number:");
+        double num2 = Convert.ToDouble(Console.ReadLine());
+        Console.WriteLine("The second number is: " + num2);
+        Console.WriteLine("Enter operator (+, -, *, /): ");
+        char op = Console.ReadKey().KeyChar;
+        Console.WriteLine();
+        double result = 0;
+        switch (op)
+        {
+            case '+':
+                result = num1 + num2;
+                break;
+            case '-':
+                result = num1 - num2;
+                break;
+            case '*':
+                result = num1 * num2;
+                break;
+            case '/':
+                if (num2 != 0)
+                {
+                    result = num1 / num2;
+                }
+                else
+                {
+                    Console.WriteLine("Error: Division by zero is not allowed.");
+                }
+                break;
+        }
+        Console.WriteLine($"Result: {result}");
+        Console.ReadKey();
+    }
+}
+
+<h1>program2</h1>
+
+using System;
+class neww2
+{
+    static void Main(string[] args)
+    {
+        int a, b, c, d, i;
+        for (i = 1; i < 1000; i++)
+        {
+            a = i / 100;
+            b = (i - a * 100) / 10;
+            c = i % 10;
+            d = (a * a * a) + (b * b * b) + (c * c * c);
+            if (i == d)
+            {
+                Console.WriteLine(i);
+            }
+ }
+}
+}
+
+<h1>program3</h1>
+
+using System;
+class neww2
+{
+    static void Main()
+    {
+        Console.Write("Enter a string: ");
+        string input = Console.ReadLine();
+
+        Console.WriteLine("All substrings in the given string:");
+        ListAllSubstrings(input);
+
+        Console.ReadLine(); // Keep console window open
+    }
+
+    static void ListAllSubstrings(string input)
+    {
+        for (int i = 0; i < input.Length; i++)
+        {
+            for (int j = i + 1; j <= input.Length; j++)
+            {
+                string substring = input.Substring(i, j - i);
+                Console.WriteLine(substring);
+     	}
+        }
+ }
+}
+
+<h1>program4</h1>
+using System;
+
+class neww2
+{
+    static void Main(string[] args)
+    {
+        int[] arr = { 10, 20, 0, 30, 50 };
+
+        try
+        {
+            for (int i = 0; i < arr.Length; i++)
+            {
+                Console.WriteLine(arr[i] / arr[i + 1]);
+            }
+        }
+        catch (DivideByZeroException e)
+        {
+            Console.
+            WriteLine("/ by 0 error");
+        }
+        catch (IndexOutOfRangeException e)
+        {
+            Console.WriteLine("array out of bound");
+        }
+        finally
+        {
+            // Fix: Remove the declaration of 'int i' inside the 'finally' block.
+            for (int i = 0; i < arr.Length; i++)
+            {
+                Console.Write("{0}\t", arr[i]);
+            }
+        }
+ }
+}
+
+
+<h1>program5</h1>
+
+using System;
+
+class Program5
+{
+    static void Main(string[] args){
+        Console.WriteLine("Enter the number of steps: ");
+        int n = int.Parse(Console.ReadLine() ?? "0");
+
+        int[, ] Triangle = new int[n, n];
+
+        for (int i = 0; i < n; i++){
+            Triangle[i, 0] = 1;  
+            Triangle[i, i] = 1;  
+        }
+
+        for (int i = 2; i < n; i++){
+            for (int j = 1; j < i; j++){
+                Triangle[i, j] = Triangle[i - 1, j - 1] + Triangle [i - 1, j];
+            }
+        }
+
+        for (int i = 0; i < n; i++){
+            for (int j = 0; j <= i; j++){
+                Console.Write(Triangle[i, j] + " ");
+            }
+            Console.WriteLine();
+} }
+}
+
+<h1>program6</h1>
+
+using System;
+class Program 
+{
+    static void Main(){
+        Console.WriteLine("Enter the number of steps: ");
+        int rows = int.Parse(Console.ReadLine() ?? "0");
+
+        int[][] floydsTriangle = new int[rows][];
+
+        for(int i=0; i< rows; i++){
+            floydsTriangle[i] = new int[i+1]; 
+        }
+
+        int number = 1; 
+        for(int i=0; i< rows; i++){
+            for(int j=0; j<=i; j++) {
+                floydsTriangle[i][j] = number;
+                number++;
+            }
+        }
+
+        for (int i=0; i< rows; i++){
+            for (int j=0; j <= i; j++){
+                Console.Write(floydsTriangle[i][j] + " ");
+            }
+            Console.WriteLine();
+        }
+}
+}
+
+<h1>program7</h1>
+string filePath = "text.txt";
+
+Console.WriteLine("Reading the contents from '{0}'...\n", filePath);
+Console.WriteLine("Contents of the file are :\n{0}\n", File.ReadAllText(filePath));
+
+Console.Write("Enter the name of the file to copy the contents: ");
+string destFilePath = Console.ReadLine() + ".txt";
+
+File.WriteAllText(destFilePath, File.ReadAllText(filePath));
+Console.WriteLine("Copied!");
+
+
+<h1>program8</h1>
+
+//Program 8
+
+// Develop a C# Program to Implement Stack with Push and Pop Operations 
+// [Hint: Use class, get/set properties, methods for push and pop and main method]
+
+using System;
+
+class Stack{
+    private int _top;
+    private int[] items;
+    private int max_size;
+
+    public Stack(int size){
+        max_size = size;
+        items = new int[size];
+        _top = -1;
+    }
+
+    public void display(){
+        if(!isEmpty()){
+            Console.WriteLine("The Stack Elements are: ");
+            for(int i = top; i >= 0; i--){
+                Console.WriteLine(items[i]);
+            }
+        }
+    }
+
+    public void peek(){
+        if(!isEmpty()){
+            Console.WriteLine("The top element of the Stack is {0}.", items[top]);
+        }
+    }
+
+    public void push(int item){
+        if(!isFull()){
+            items[++_top] = item;
+            Console.WriteLine("{0} added to the Stack!", item);
+            return;
+        }
+    }
+
+    public int pop(){
+        if(!isEmpty()){
+            return items[_top--];
+        }
+        return -1;
+    }
+
+    public bool isFull(){
+        if(this.top == max_size-1){
+            Console.WriteLine("Stack is Full!");
+            return true;
+        }
+        return false;
+    }
+
+    public bool isEmpty(){
+        if(top == -1){
+            Console.WriteLine("Stack is Empty!");
+            return true;
+        }
+        return false;
+    }
+
+    public int top{
+        get{
+            return _top;
+        }
+    }
+}
+
+class Program8{
+    static void Main(string[] args){
+        Console.Write("Enter the max size of the stack: ");
+        int size = int.Parse(Console.ReadLine());
+
+        Stack stack = new Stack(size);
+
+        while(true){
+            Console.WriteLine("""
+            ---MENU---
+            1. Push an item
+            2. Pop an item
+            3. Peek top item
+            4. Display stack
+            5. Exit
+
+            Enter an option:
+            """);
+            int choice = int.Parse(Console.ReadLine());
+
+            switch(choice){
+                case 1:
+                    Console.Write("Enter an element to push to stack: ");
+                    stack.push(int.Parse(Console.ReadLine()));
+                    break;
+                case 2:
+                    Console.WriteLine("The popped element is {0}.", stack.pop());
+                    break;
+                case 3:
+                    stack.peek();
+                    break;
+                case 4:
+                    stack.display();
+                    break;
+                case 5:
+                    Console.WriteLine("Program Halted Successfully!");
+                    Environment.Exit(0);
+                    break;
+                default:
+                    Console.WriteLine("Enter a valid option!");
+                    break;
+            }
+        }
+    }
+}
+
+<h1>program9</h1>
+
+//Program 9
+// Design a class “Complex” with data members, constructor and method for overloading a binary operator ‘+’. 
+// Develop a C# program to read Two complex number and Print the results of addition.
+
+int real, imag;
+
+Console.Write("Complex 1: Enter the real no.: ");
+real = int.Parse(Console.ReadLine());
+Console.Write("Complex 1: Enter the imaginary no.: ");
+imag = int.Parse(Console.ReadLine());
+
+Complex c1 = new Complex(real, imag);
+
+Console.Write("Complex 2: Enter the real no.: ");
+real = int.Parse(Console.ReadLine());
+Console.Write("Complex 2: Enter the imaginary no.: ");
+imag = int.Parse(Console.ReadLine());
+
+Complex c2 = new Complex(real, imag);
+
+Complex c3 = c1 + c2;
+Console.WriteLine("Addition of ({0}) and ({1}) is ({2})", c1, c2, c3);
+
+class Complex{
+    private int real;
+    private int imag;
+
+    public Complex(int real, int imag){
+        this.real = real;
+        this.imag = imag;
+    }
+
+    public static Complex operator + (Complex c1, Complex c2){
+        return new Complex(c1.real + c2.real, c1.imag + c2.imag);
+    }
+
+    public override string ToString()
+    {
+        return(real + " + " + imag + "i");
+    }
+}
+
+
+<h1>program10</h1>
+
+
+//Program 10
+
+// Develop a C# program to create a class named shape. Create three sub classes namely: circle, triangle and 
+// square, each class has two member functions named draw () and erase (). Demonstrate polymorphism 
+// concepts by developing suitable methods, defining member data and main program. 
+
+class Shape{
+    public virtual void draw(){
+        Console.WriteLine("Drawing the shape.");
+    }
+
+    public virtual void erase(){
+        Console.WriteLine("Erasing the shape.");
+    }
+}
+
+class Circle: Shape{
+    public override void draw(){
+        Console.WriteLine("Drawing a circle.");
+    }
+
+    public override void erase(){
+        Console.WriteLine("Erasing the circle.");
+    }
+}
+
+class Triangle: Shape{
+    public override void draw(){
+        Console.WriteLine("Drawing a triangle.");
+    }
+
+    public override void erase(){
+        Console.WriteLine("Erasing the triangle.");
+    }
+}
+
+class Square: Shape{
+    public override void draw(){
+        Console.WriteLine("Drawing a square.");
+    }
+
+    public override void erase(){
+        Console.WriteLine("Erasing the square.");
+    }
+}
+
+class Program10{
+    public static void Main(){
+        Shape shape = new Shape();
+        Circle circle = new Circle();
+        Triangle triangle = new Triangle();
+        Square square = new Square();
+
+        Console.WriteLine("\nShape Class Methods:");
+        shape.draw();
+        shape.erase();
+
+        Console.WriteLine("\nCircle Class Methods:");
+        circle.draw();
+        circle.erase();
+
+        Console.WriteLine("\nTriangle Class Methods:");
+        triangle.draw();
+        triangle.erase();
+
+        Console.WriteLine("\nSquare Class Methods:");
+        square.draw();
+        square.erase();
+    }
+}
+
+<h1>program10</h1>
+
+//Program 10
+
+// Develop a C# program to create a class named shape. Create three sub classes namely: circle, triangle and 
+// square, each class has two member functions named draw () and erase (). Demonstrate polymorphism 
+// concepts by developing suitable methods, defining member data and main program. 
+
+class Shape{
+    public virtual void draw(){
+        Console.WriteLine("Drawing the shape.");
+    }
+
+    public virtual void erase(){
+        Console.WriteLine("Erasing the shape.");
+    }
+}
+
+class Circle: Shape{
+    public override void draw(){
+        Console.WriteLine("Drawing a circle.");
+    }
+
+    public override void erase(){
+        Console.WriteLine("Erasing the circle.");
+    }
+}
+
+class Triangle: Shape{
+    public override void draw(){
+        Console.WriteLine("Drawing a triangle.");
+    }
+
+    public override void erase(){
+        Console.WriteLine("Erasing the triangle.");
+    }
+}
+
+class Square: Shape{
+    public override void draw(){
+        Console.WriteLine("Drawing a square.");
+    }
+
+    public override void erase(){
+        Console.WriteLine("Erasing the square.");
+    }
+}
+
+class Program10{
+    public static void Main(){
+        Shape shape = new Shape();
+        Circle circle = new Circle();
+        Triangle triangle = new Triangle();
+        Square square = new Square();
+
+        Console.WriteLine("\nShape Class Methods:");
+        shape.draw();
+        shape.erase();
+
+        Console.WriteLine("\nCircle Class Methods:");
+        circle.draw();
+        circle.erase();
+
+        Console.WriteLine("\nTriangle Class Methods:");
+        triangle.draw();
+        triangle.erase();
+
+        Console.WriteLine("\nSquare Class Methods:");
+        square.draw();
+        square.erase();
+    }
+}
+
+<h1>program11</h1>
+
+// Develop a C# program to create an abstract class Shape with abstract methods calculateArea() and 
+// calculatePerimeter(). Create subclasses Circle and Triangle that extend the Shape class and implement the 
+// respective methods to calculate the area and perimeter of each shape
+
+abstract class Shape{
+    public abstract double calculateArea();
+    public abstract double calculatePerimeter();
+}
+
+class Circle: Shape{
+    private double radius;
+
+    public Circle(double r){
+        radius = r;
+    }
+
+    public override double calculateArea(){
+        return Math.PI * radius * radius;
+    }
+
+    public override double calculatePerimeter(){
+        return 2 * Math.PI * radius;
+    }
+}
+
+class Triangle: Shape{
+    private double a;
+    private double b;
+    private double c;
+    private double h;
+
+    public Triangle(double a, double b, double c, double h){
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.h = h;
+    }
+
+    public override double calculateArea(){
+        return 0.5 * b * h;
+    }
+
+    public override double calculatePerimeter(){
+        return a + b + c;
+    }
+}
+
+class Program11{
+    public static void Main(string[] args){
+        Console.WriteLine("Enter the radius of the circle: ");
+        double radius = double.Parse(Console.ReadLine());
+
+        Shape circle = new Circle(radius);
+        Console.WriteLine("Area of the circle: {0}\nPerimeter of the circle: {1}", circle.calculateArea(), circle.calculatePerimeter());
+
+        Console.WriteLine("\nEnter the length of the side A of triangle: ");
+        double a = double.Parse(Console.ReadLine());
+
+        Console.WriteLine("\nEnter the length of the side B of triangle: ");
+        double b = double.Parse(Console.ReadLine());
+
+        Console.WriteLine("\nEnter the length of the side C of triangle: ");
+        double c = double.Parse(Console.ReadLine());
+
+        Console.WriteLine("\nEnter the height of triangle: ");
+        double h = double.Parse(Console.ReadLine());
+
+        Shape triangle = new Triangle(a, b, c, h);
+        Console.WriteLine("Area of the triangle: {0}\nPerimeter of the triangle: {1}", triangle.calculateArea(), triangle.calculatePerimeter());
+
+    }
+}
+
+
+<h1>program12</h1>
+
+
+// Develop a C# program to create an interface Resizable with methods resizeWidth(int width) and 
+// resizeHeight(int height) that allow an object to be resized. Create a class Rectangle that implements the 
+// Resizable interface and implements the resize methods
+
+public interface Resizable{
+    public void resizeWidth(int width);
+    public void resizeHeight(int height);
+}
+
+class Rectangle: Resizable{
+    private int width;
+    private int height;
+
+    public Rectangle(int width, int height){
+        this.width = width;
+        this.height = height;
+    }
+    
+    public void resizeWidth(int width){
+        this.width = width;
+    }
+    
+    public void resizeHeight(int height){
+        this.height = height;
+    }
+
+    public void display(){
+        Console.WriteLine("Width: {0}\nHeight: {1}", width, height);
+    }
+}
+
+class Program12{
+    public static void Main(string[] args){
+        Console.Write("Enter the width of the rectangle: ");
+        int width = int.Parse(Console.ReadLine());
+
+        Console.Write("Enter the height of the rectangle: ");
+        int height = int.Parse(Console.ReadLine());
+
+        Rectangle r = new Rectangle(width, height);
+        r.display();
+
+        Console.Write("Enter the resized width of the rectangle: ");
+        r.resizeWidth(int.Parse(Console.ReadLine()));
+
+        Console.Write("Enter the resized height of the rectangle: ");
+        r.resizeHeight(int.Parse(Console.ReadLine()));
+
+        r.display();
+    }
+}
+</pre>
