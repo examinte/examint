@@ -1,87 +1,170 @@
 <pre>
-	<h1>company database</h1><br>
-CREATE DATABASE COMPANY;
-
-USE COMPANY;
-
-CREATE TABLE EMPLOYEE (
-    SSN INT PRIMARY KEY,
-    Name VARCHAR(100),
-    Address VARCHAR(255),
-    Sex CHAR(1),
-    Salary DECIMAL(10, 2),
-    SuperSSN INT,
-    DNo INT
+<h1>publisher database</h1><br>
+CREATE TABLE PUBLISHER(
+    Name VARCHAR(20) PRIMARY KEY, 
+    Address VARCHAR(30), 
+    Phone BIGINT
 );
-
-CREATE TABLE DEPARTMENT (
-    DNo INT PRIMARY KEY,
-    DName VARCHAR(100),
-    MgrSSN INT,
-    MgrStartDate DATE
+INSERT INTO publisher VALUES
+('Springer', 'Los Angeles', 1234567890),
+('John', 'Los Santos', 1234567890),
+('Wick', 'Canada', 1234567890),
+('Snow', 'Britain', 1234567890),
+('Casper', 'India', 1234567890),
+('Nolan', 'United States', 1234567890);
+SELECT * from publisher;
+CREATE TABLE book(
+    Book_ID INT PRIMARY KEY,
+    Title VARCHAR(20),
+    Publisher_Name VARCHAR(20),
+    Published_Year INT,
+    CONSTRAINT book_publishername_fk FOREIGN KEY(Publisher_Name)
+    REFERENCES publisher(Name)
 );
+INSERT INTO book VALUES
+(1, 'Alchemist', 'Springer', 2016),
+(2, 'Game Of Thrones', 'John', 2017),
+(3, 'Baba Yaga', 'Wick', 2018),
+(4, 'Stranger Things', 'Snow', 2017),
+(5, 'Naruto', 'Casper', 2020),
+(6, 'Whiplash', 'Nolan', 2014);
+SELECT * FROM book;
+CREATE TABLE book_authors(
+    Book_ID INT,
+    Author_Name VARCHAR(20),
 
-CREATE TABLE DLOCATION (
-    DNo INT,
-    DLoc VARCHAR(100),
-    PRIMARY KEY (DNo, DLoc)
+    CONSTRAINT book_author_pk PRIMARY KEY(Book_ID, Author_Name),
+
+    CONSTRAINT book_author_bookid_fk FOREIGN KEY(Book_ID)
+    REFERENCES BOOK(Book_ID) ON DELETE CASCADE
 );
-
-CREATE TABLE PROJECT (
-    PNo INT PRIMARY KEY,
-    PName VARCHAR(100),
-    PLocation VARCHAR(100),
-    DNo INT
+INSERT INTO book_authors VALUES
+(1, 'William'),
+(2, 'Kane'),
+(3, 'Paulo'),
+(4, 'Harry'),
+(5, 'Potter'),
+(6, 'Nolan');
+SELECT * FROM book_authors;
+CREATE TABLE library_branch(
+    Branch_ID INT PRIMARY KEY,
+    Branch_Name VARCHAR(20) NOT NULL,
+    Branch_Address VARCHAR(50)
 );
+INSERT INTO library_branch VALUES
+(501, 'Mangalagangothri', 'Port Road, Mangalore'),
+(502, 'Central Library', 'Hill Top Road, Mangalore'),
+(503, 'Gandhi Library', 'Lalbagh, Bangalore'),
+(504, 'Dr. Ambedkar Library', 'Kautilya Nagara, Mysore'),
+(505, 'Kuvempu Library', 'Dasara Halli, Hassan'),
+(506, 'Dr. APJ Library', 'Neharu Nagara, Puttur'),
+(507, 'Pampa Library', 'Nethravathi Nagar, Ullal'),
+(508, 'Kumara Vyas Library', 'Brahmavara, Udupi'),
+(509, 'Shivaram Library', 'Belman, Bantwal');
+SELECT * FROM library_branch;
+-- Book_Copies Table:
 
-CREATE TABLE WORKS_ON (
-    SSN INT,
-    PNo INT,
-    Hours INT,
-    PRIMARY KEY (SSN, PNo)
+CREATE TABLE book_copies(
+    Book_ID INT,
+    Branch_ID INT,
+    No_of_Copies INT,
+    PRIMARY KEY(Book_ID, Branch_ID),
+
+    CONSTRAINT book_copies_bookid_fk FOREIGN KEY(Book_ID)
+    REFERENCES book(Book_ID) ON DELETE CASCADE,
+
+    CONSTRAINT book_copies_branchid_fk FOREIGN KEY(Branch_ID)
+    REFERENCES library_branch(Branch_ID) ON DELETE CASCADE
+
 );
+INSERT INTO book_copies VALUES
+(1, 501, 79),
+(2, 501, 23),
+(2, 505, 43),
+(2, 507, 9),
+(3, 501, 87),
+(3, 506, 64),
+(4, 502, 65),
+(4, 505, 14),
+(5, 502, 55),
+(5, 503, 24),
+(5, 504, 12),
+(6, 503, 20),
+(6, 504, 15);
+SELECT * FROM book_copies;
+CREATE TABLE book_lending(
+    Book_ID INT,
+    Branch_ID INT,
+    Card_No INT,
+    Date_Out DATE,
+    Due_Date DATE,
 
-SHOW TABLES;
+    CONSTRAINT book_lending_pk PRIMARY KEY(Book_ID, Branch_ID, Card_No),
 
--- -- Inserting sample data into EMPLOYEE table
-INSERT INTO EMPLOYEE (SSN, Name, Address, Sex, Salary, SuperSSN, DNo) 
-VALUES 
-(123456789, 'John Scott', '123 Main St', 'M', 60000.00, 987654321, 1),
-(234567890, 'Jane Doe', '456 Elm St', 'F', 55000.00, 987654321, 2),
-(345678901, 'Mark Scott', '789 Oak St', 'M', 65000.00, 987654321, 1),
-(456789012, 'Emily Johnson', '101 Cedar St', 'F', 70000.00, 987654321, 3);
-
--- -- Inserting sample data into DEPARTMENT table
-INSERT INTO DEPARTMENT (DNo, DName, MgrSSN, MgrStartDate) 
-VALUES 
-(1, 'HR', 123456789, '2020-01-01'),
-(2, 'IT', 234567890, '2019-05-15'),
-(3, 'Accounts', 345678901, '2018-12-20');
-
--- -- Inserting sample data into DLOCATION table
-INSERT INTO DLOCATION (DNo, DLoc) 
-VALUES 
-(1, 'Location1'),
-(2, 'Location2'),
-(3, 'Location3');
-
--- -- Inserting sample data into PROJECT table
-INSERT INTO PROJECT (PNo, PName, PLocation, DNo) 
-VALUES 
-(1, 'Project1', 'Location1', 1),
-(2, 'Project2', 'Location2', 2),
-(3, 'Project3', 'Location3', 3);
-
--- Inserting sample data into WORKS_ON table
-INSERT INTO WORKS_ON (SSN, PNo, Hours) 
-VALUES 
-(123456789, 1, 40),
-(234567890, 2, 35),
-(345678901, 3, 45),
-(456789012, 1, 42);
+    CONSTRAINT book_lending_book_branchid_fk FOREIGN KEY(Book_ID, Branch_ID)
+    REFERENCES book_copies(Book_ID, Branch_ID) ON DELETE CASCADE 
+);
+INSERT INTO book_lending VALUES
+(1, 501, 301, '2017-01-01', '2017-07-23'),
+(1, 501, 302, '2017-01-01', '2017-07-23'),
+(2, 505, 301, '2017-02-10', '2017-07-24'),
+(2, 507, 303, '2017-02-10', '2017-07-24'),
+(2, 505, 302, '2017-01-01', '2017-07-23'),
+(2, 505, 303, '2017-07-03', '2017-07-27'),
+(2, 507, 302, '2017-07-09', '2017-07-27'),
+(3, 501, 303, '2017-02-15', '2017-07-25'),
+(3, 501, 304, '2017-02-15', '2017-07-25'),
+(3, 506, 303, '2017-07-10', '2017-06-30'),
+(4, 502, 305, '2017-01-24', '2017-03-31'),
+(4, 505, 301, '2017-01-01', '2017-07-23'),
+(4, 505, 303, '2017-02-10', '2017-03-24'),
+(4, 505, 304, '2017-05-20', '2017-06-03'),
+(5, 502, 301, '2017-03-21', '2017-06-01'),
+(6, 503, 303, '2017-02-10', '2017-03-24'),
+(6, 504, 303, '2017-02-10', '2017-03-24'),
+(6, 504, 306, '2017-06-12', '2017-09-23');
+SELECT * FROM book_lending;
+SELECT B.Book_ID, B.Title, B.Publisher_Name, A.Author_Name, C.No_of_Copies, L.Branch_Name
+FROM book B, book_authors A, book_copies C, library_branch L
+WHERE B.Book_ID = A.Book_ID
+    AND A.Book_ID = C.Book_ID
+    AND C.Branch_ID = L.Branch_ID;
+SELECT Card_No AS Card_Number
+FROM book_lending
+WHERE Date_Out BETWEEN '2017-01-01' AND '2017-06-30'
+GROUP BY Card_No
+HAVING COUNT(Book_ID)>3;
+DELETE FROM book
+WHERE Book_ID = 6;
+CREATE TABLE book_partition(
+    Book_ID INT NOT NULL,
+    Title VARCHAR(20),
+    Publisher_Name VARCHAR(20),
+    Published_Year INT
+)
+PARTITION BY RANGE(Published_Year)(
+    PARTITION q0 VALUES LESS THAN(2017),
+    PARTITION q1 VALUES LESS THAN(2019),
+    PARTITION q2 VALUES LESS THAN(2021)
+);
+INSERT INTO book_partition VALUES
+(1, 'Alchemist', 'Springer', 2016),
+(2, 'Game Of Thrones', 'John', 2017),
+(3, 'Baba Yaga', 'Wick', 2018),
+(4, 'Stranger Things', 'Snow', 2017),
+(5, 'Naruto', 'Casper', 2020);
+SELECT * FROM book_partition PARTITION(q0);
+SELECT * FROM book_partition PARTITION(q1);
+SELECT * FROM book_partition PARTITION(q2);
+CREATE VIEW book_copies_view
+AS SELECT B.Title, C.Branch_ID, C.No_of_Copies
+FROM book B, book_copies C
+WHERE B.Book_ID = C.Book_ID;
+SELECT * FROM book_copies_view;
 
 <h1>salesman database</h1>
 
+-- Salesman Table
 CREATE TABLE salesman(
     Salesman_ID INT PRIMARY KEY,
     Name CHAR(20) NOT NULL,
@@ -152,10 +235,6 @@ INSERT INTO orders VALUES
 (70013, 3045.0000, '2012-04-21', 5001, 3007);
 
 SELECT * FROM orders;
-show tables;
-desc customer;
-desc orders;
-desc salesman;
 -- Count thc customers with grades above Bangalore's average.
 
 SELECT Grade,COUNT(Customer_ID) as Count
@@ -176,13 +255,15 @@ WHERE Salesman_ID IN (
     HAVING count(Customer_ID) > 1
 );
 -- List all the salesman and indicate those who have and don't have customers in their cities
-SELECT S.Salesman_ID, S.Name, C.Customer_Name,
-CASE
-    WHEN S.City = C.City THEN "MATCH"
+
+SELECT C.Customer_Name, S.Name AS Salesman, C.City AS City,
+CASE 
+    WHEN C.City = S.City THEN "MATCH"
     ELSE "NOT MATCH"
 END AS Same_City
-FROM salesman S, customer C;
-
+FROM customer C, salesman S
+WHERE C.Salesman_ID = S.Salesman_ID
+ORDER BY S.Name, C.Customer_Name;
 -- Create a view that finds the salesman who has thc customer with the highest order ofa day.
 CREATE VIEW HIGHEST_ORDER_SALESMAN
 AS SELECT O.Order_Date, S.Salesman_ID, S.Name
@@ -198,114 +279,98 @@ WHERE S.Salesman_ID = O.Salesman_ID
 SELECT * FROM highest_order_salesman;
 DELETE
 FROM salesman
-WHERE Salesman_ID = 5001;
+WHERE Salesman_ID = 5001;    
 SELECT * FROM salesman;
-
 
 <h1>Actor database</h1>
 
-
 CREATE TABLE ACTOR
-(Act_id INT PRIMARY KEY,
-Act_name CHAR(20) NOT NULL,
-Act_gender CHAR
+(
+    Act_ID INT PRIMARY KEY,
+    Act_name VARCHAR(20) NOT NULL,
+    Act_Gender CHAR(1)
 );
-
-SHOW TABLES;
-
 INSERT INTO ACTOR VALUES
-(101,'James Stewart','M'),
-(102,'Deborah Kerr','F'),
-(103,'Peter Otoole','M'),
-(104,'Robert De Niro','M'),
-(105,'F Murray Abraham','M'),
-(106,'Harrison Ford','M'),
-(107,'Nicole kidman','F'),
-(108,'Stephan Baldwin','M'),
-(109,'Jack Nicholson','M'),
-(110,'Mark Nahloberg','M');
-
-SHOW TABLES;
-
-DESC ACTOR;
-
+    (101,'James Stewart','M'),
+    (102,'Deborah Kerr','F'),
+    (103,'Peter Otoole','M'),
+    (104,'Robert De Niro','M'),
+    (105,'F Murray Abraham','M'),
+    (106,'Harrison Ford','M'),
+    (107,'Nicole kidman','F'),
+    (108,'Stephen Baldwin','M'),
+    (109,'Jack Nicholson','M'),
+    (110,'Mark Nahloberg','M');
 SELECT * FROM ACTOR;
 
 CREATE TABLE DIRECTOR
-(Dir_id INT PRIMARY KEY,
-Dir_name VARCHAR(20) NOT NULL,
-Dir_phone INT(12)
+(
+    Dir_id INT PRIMARY KEY,
+    Dir_name VARCHAR(20) NOT NULL,
+    Dir_phone INT(12)
 );
-
 INSERT INTO DIRECTOR VALUES
-(201,'Alfred Hitchcock',987654001),
-(202,'Jack Clayton',987654002),
-(203,'David Lean',987654003),
-(204,'Michael Cimino',987654004),
-(205,'Milos Forman',987654005),
-(206,'Ridley Scott',987654006),
-(207,'Stanley Kubrick',987654007),
-(208,'Bryan Singer',987654008);
+(201,"Alfred Hitchcock",987654001),
+(202,"Jack Clayton",987654002),
+(203,"David Lean",987654003),
+(204,"Michael Cimino",987654004),
+(205,"Milos Forman",987654005),
+(206,"Ridley Scott",987654006),
+(207,"Steven Spielberg",987654007),
+(208,"Bryan Singer",987654008);
 
 SELECT * FROM DIRECTOR;
 
-CREATE TABLE MOVIES
-(Mov_id INT PRIMARY KEY,
-Mov_title VARCHAR(30),
-Mov_year INT,
-Mov_lang VARCHAR(10),
-Dir_id INT,
-
-CONSTRAINT dir_dirid_fk FOREIGN KEY(Dir_id) REFERENCES DIRECTOR(Dir_id)
+CREATE TABLE MOVIES(
+    Mov_ID INT PRIMARY KEY,
+    Mov_Title VARCHAR(30),
+    Mov_Year INT,   
+    Mov_Lang VARCHAR(10),
+    Dir_Id INT,
+    CONSTRAINT dirid_fk FOREIGN KEY(Dir_ID) REFERENCES DIRECTOR(Dir_ID)
 );
-
 INSERT INTO MOVIES VALUES
-(901,'Vertigo',2000,'English',205),
-(902,'The Innocents',1961,'English',204),
-(903,'Lawrence of Arabia',1998,'English',203),
-(904,'The Deer Hunter',2001,'English',202),
-(905,'Amadeus',2002,'English',201),
-(908,'The Usual Suspects',2010,'English',208),
-(909,'Chinatown',2010,'English',207),
-(910,'Boogie Nights',2015,'English',206),
-(911,'Annie Hall',2016,'English',205),
-(912,'Princess Mononoke',2017,'Japanese',204);
- 
- SELECT * FROM MOVIES;
+(901,"Vertigo",2000,"English",205),
+(902,"The Innocents",1961,"English",204),
+(903,"Lawrence of Arabia",1998,"English",203),
+(904,"The Deer Hunter",2001,"English",202),
+(905,"Amadeus",2002,"English",201),
+(908,"The Usual Suspects",2010,"English",208),
+(909,"Chinatown",2010,"English",207),
+(910,"Boogie Nights",2015,"English",206),
+(911,"Annie hall",2016,"English",205),
+(912,"Princess Mononoke",2017,"Japanese",204);
+SELECT * FROM MOVIES;
 
-CREATE TABLE MOVIE_CAST
-(Act_id INT,
-Mov_id INT,
-Role VARCHAR(20),
-CONSTRAINT mc_actid_movid_pk PRIMARY KEY(Act_id,Mov_id),
-CONSTRAINT mc_actid_fk FOREIGN KEY(Act_id) REFERENCES ACTOR(Act_id),
-CONSTRAINT mc_movid_fk FOREIGN KEY(Mov_id) REFERENCES MOVIES(Mov_id)
+CREATE TABLE MOVIE_CAST(
+    Act_ID INT,
+    Mov_ID INT,
+    Role VARCHAR(20),
+    CONSTRAINT mc_actid_movid_pk PRIMARY KEY(Act_ID, Mov_id),
+    CONSTRAINT mc_actid_fk FOREIGN KEY(Act_ID) REFERENCES ACTOR(Act_ID),
+    CONSTRAINT mc_movid_fk FOREIGN KEY(Mov_ID) REFERENCES MOVIES(Mov_ID)
 );
-
-INSERT INTO MOVIE_CAST VALUES
-(101,901,'John Scottie Ferguso'),
-(101,902,'Eilie Adams'),
-(101,910,'Eddie Adams'),
-(102,901,'Eddie Adams'),
-(102,902,'Miss Giddens'),
-(102,904,'Jack Paul'),
-(103,903,'T.E Lawrence'),
-(104,904,'Michael'),
-(105,905,'Antonio Salieri'),
-(105,910,'Smith'),
-(108,908,'McManus'),
-(109,911,'James Bond'),
-(110,912,'Peter Park');
-
-SELECT * FROM MOVIE_CAST;
-
-CREATE TABLE RATING
-(Mov_id INT,
-Rev_stars INT,
-CONSTRAINT r_movid_revstars_pk PRIMARY KEY(Mov_id,Rev_stars),
-CONSTRAINT r_movid_fk FOREIGN KEY(Mov_id) REFERENCES MOVIES(Mov_id)
+INSERT INTO MOVIE_CAST VALUES 
+(101,901,"John Scottle Ferguse"),
+(101,902,"Ellie Adams"),
+(101,910,"Eddie Adams"),
+(102,901,"Eddie Adams"),
+(102,902,"Miss Giddens"),
+(102,904,"Jack Paul"),
+(103,903,"T.E.Lawrence"),
+(104,904,"Michael"),
+(105,905,"Antonio Salieri"),
+(105,910,"Smith"),
+(108,908,"McManus"),
+(109,911,"James Bond"),
+(110,912,"Peter Park");
+SELECT * FROM movie_cast;
+CREATE TABLE RATING(
+    Mov_ID INT,
+    Rev_Stars INT,
+    CONSTRAINT r_movid_revstars_pk PRIMARY KEY(Mov_ID, Rev_Stars),
+    CONSTRAINT r_movid_fk FOREIGN KEY(Mov_ID) REFERENCES MOVIES(Mov_ID)
 );
-
 INSERT INTO RATING VALUES
 (901,1),
 (901,2),
@@ -313,45 +378,41 @@ INSERT INTO RATING VALUES
 (901,4),
 (901,5),
 (902,3),
-(903,2),
+(903,4),
 (904,0),
 (905,5),
 (908,1),
-(909,1),
+(909,2),
 (910,3);
 
-SELECT * FROM RATING
-
+SELECT * FROM rating;
 SELECT Mov_Title
 FROM MOVIES
-WHERE Dir_id IN
+WHERE Dir_ID IN
 (
     SELECT Dir_id
     FROM DIRECTOR
     WHERE Dir_name LIKE '%Hitchcock'
 );
+SELECT DISTINCT Mov_title
+FROM movies
+WHERE Mov_id IN (
+    SELECT Mov_id
+    FROM movie_cast
+    where Act_id IN (
+        SELECT Act_ID
+        FROM movie_cast
+        GROUP BY Act_ID
+        HAVING COUNT(Mov_id)>1
+    ));
 
-SELECT DISTINCT Mov_title 
- FROM MOVIES 
- WHERE Mov_id IN ( SELECT Mov_id 
-FROM MOVIE_CAST 
-WHERE Act_id IN ( SELECT Act_id 
- FROM MOVIE_CAST 
- GROUP BY Act_id 
- HAVING COUNT(Mov_id )>1));
-
-SELECT  DISTINCT A.Act_name 
-FROM    ACTOR A JOIN MOVIE_CAST C JOIN MOVIES M 
-        ON A.Act_id =C.Act_id AND C.Mov_id= M.Mov_id
-WHERE   M.Mov_year<2000 AND M.Mov_year>2015;
-
-SELECT      MOVIES.Mov_title,RATING.Mov_id,SUM(RATING.Rev_stars) 
-            AS Num_stars,MAX(Rev_stars) AS Max_star
-FROM        MOVIES RIGHT OUTER JOIN RATING 
-            ON MOVIES.Mov_id=RATING.Mov_id
-GROUP BY    RATING.Mov_id ;
-
-
+SELECT DISTINCT A.Act_name
+FROM actor A JOIN movie_cast C JOIN movies M
+    ON A.Act_id = C.Act_id AND C.Mov_id = M.Mov_id
+WHERE M.Mov_year < 2000 OR M.Mov_year > 2015;
+SELECT MOVIES.Mov_title, Rating.Mov_id, SUM(Rating.Rev_stars) AS Num_stars, MAX(Rev_stars) AS Max_star
+FROM movies RIGHT OUTER JOIN Rating ON Movies.Mov_id = Rating.Mov_id
+GROUP BY Rating.Mov_id;
 UPDATE RATING
 SET Rev_stars = 5
 WHERE Mov_id IN (
@@ -360,125 +421,123 @@ WHERE Mov_id IN (
     WHERE Dir_id IN (
         SELECT Mov_id 
         FROM director
-        WHERE Dir_name = 'Stanley Kubrick'
+        WHERE Dir_name = 'Steven Spielberg'
     )
 );
-
-SELECT * FROM RATING;
+SELECT * from rating;
+INSERT INTO movies VALUES
+(913,"Boogie Mornings",1999,"English",205);
+INSERT into movie_cast VALUES
+(109,913, "Peter Parker");
+SELECT A.Act_name, M.Mov_Year
+FROM actor A JOIN movie_cast C JOIN movies M
+    ON A.Act_id = C.Act_id AND C.Mov_id = M.Mov_id;
 
 
 <h1>Student database</h1>
 
 
 
-CREATE TABLE STUDENT
-( Usn VARCHAR(20),
-Sname VARCHAR(20) NOT NULL,
-Address VARCHAR(20),
-Phone INT UNIQUE,
-Gender VARCHAR(2),
-PRIMARY KEY(Usn) );
-
-CREATE TABLE SEMSEC
-( Ssid INT,
-Sem VARCHAR(5),
-Sec VARCHAR(10),
-PRIMARY KEY(Ssid) );
-
-CREATE TABLE CLASS
-( Usn VARCHAR(20),
-Ssid INT,
-PRIMARY KEY(Usn,Ssid),
-FOREIGN KEY(Usn) REFERENCES STUDENT(Usn),
-CONSTRAINT
-FOREIGN KEY(Ssid) REFERENCES SEMSEC(Ssid) );
-
-CREATE TABLE SUBJECT
-( Subcode VARCHAR(20),
-Sub_title VARCHAR(30) NOT NULL,
-Sem INT,
-Credits INT,
-PRIMARY KEY(Subcode) );
-
-CREATE TABLE IAMARKS
-(Usn VARCHAR(20),
-Subcode VARCHAR(20),
-Ssid INT,
-Test1 INT,
-Test2 INT,
-Test3 INT,
-Finalia FLOAT,
-PRIMARY KEY(Usn,Subcode,Ssid),
-FOREIGN KEY(Usn,Ssid) REFERENCES CLASS(Usn,Ssid),
-FOREIGN KEY(Subcode) REFERENCES SUBJECT(Subcode) );
-
+*-- College Database
+CREATE TABLE STUDENT( 
+    Usn VARCHAR(20),
+    Sname VARCHAR(20) NOT NULL,
+    Address VARCHAR(20),
+    Phone INT UNIQUE,
+    Gender VARCHAR(2),
+    PRIMARY KEY(Usn) 
+);
 INSERT INTO STUDENT VALUES
-("1BI16CS001",'Eddie Adams','Kartulla,Finland','987654012','M'),
-('1BI16CS002','Alvy Singer','Osaka,Japan','987654013','F'),
-('1BI16CS003','San','San Agelo,USA','987654014','F'),
-('1BI16CS004','Andy Dufresne','Scotford,Canada','987654015','F'),
-('1BI16CS005','Lester Burnham','Virrat,Finland','987654016','M'),
-('1BI16CS006','Rose DeWitt Bukater','Nagoya,Japan','987654017','F'),
-('1BI16CS007','Sean Maguire','Tervo,Finland','987654018','F'),
-('4SN14CS001','Wilson Vinal','Calgary,Canada','987654037','M'),
-('4SN14CS002','Maclin D','Ladmark,Australia','987654038','M'),
-('4SN14CS003','Merlyn M','Winnipeg,Canada','987654039','F'),
-('4SN14CS004','Natasha','Sabinas,USA','987654040','F'),
-('4SN14CS005','Bunny','Calgary,Canada','987654027','M'),
-('4SN14CS006','Bruce','Ladmark,Australia','987654028','M'),
-('4SN14CS007','Jaisy K','Wiinipeg,Canada','987654029','F'),
-('4SN14CS008','Fredie banks','Sabinas,USA','987654030','F'),
-('4SN14CS009','Craig Octavia','Halsua,Finland','987654031','M'),
-('4SN14CS010','Shreya Hegde','Surathkal,Mangalore','987654032','F'),
-('4SN14CS011','Suraj Bhagya','Kodman,Udupi','987654033','M');
-
+    ('1BI16CS001','Eddie Adams','Kartulla,Finland','987654012','M'),
+    ('1BI16CS002','Alvy Singer','Osaka,Japan','987654013','F'),
+    ('1BI16CS003','San','San Agelo,USA','987654014','F'),
+    ('1BI16CS004','Andy Dufresne','Scotford,Canada','987654015','F'),
+    ('1BI16CS005','Lester Burnham','Virrat,Finland','987654016','M'),
+    ('1BI16CS006','Rose DeWitt Bukater','Nagoya,Japan','987654017','F'),
+    ('1BI16CS007','Sean Maguire','Tervo,Finland','987654018','F'),
+    ('4SN14CS001','Wilson Vinal','Calgary,Canada','987654037','M'),
+    ('4SN14CS002','Maclin D','Ladmark,Australia','987654038','M'),
+    ('4SN14CS003','Merlyn M','Winnipeg,Canada','987654039','F'),
+    ('4SN14CS004','Natasha','Sabinas,USA','987654040','F'),
+    ('4SN14CS005','Bunny','Calgary,Canada','987654027','M'),
+    ('4SN14CS006','Bruce','Ladmark,Australia','987654028','M'),
+    ('4SN14CS007','Jaisy K','Wiinipeg,Canada','987654029','F'),
+    ('4SN14CS008','Fredie banks','Sabinas,USA','987654030','F'),
+    ('4SN14CS009','Craig Octavia','Halsua,Finland','987654031','M'),
+    ('4SN14CS010','Shreya Hegde','Surathkal,Mangalore','987654032','F'),
+    ('4SN14CS011','Suraj Bhagya','Kodman,Udupi','987654033','M');
 SELECT * FROM STUDENT;
-
+CREATE TABLE SEMSEC( 
+    Ssid INT,
+    Sem VARCHAR(5),
+    Sec VARCHAR(10),
+    PRIMARY KEY(Ssid) 
+);
 INSERT INTO SEMSEC VALUES
-('101','2','A'),
-('102','2','B'),
-('103','2','C'),
-('201','4','A'),
-('202','4','B'),
-('203','4','C'),
-('301','6','A'),
-('302','6','B'),
-('303','6','C'),
-('401','8','A'),
-('402','8','B'),
-('403','8','C');
-
+    ('101','2','A'),
+    ('102','2','B'),
+    ('103','2','C'),
+    ('201','4','A'),
+    ('202','4','B'),
+    ('203','4','C'),
+    ('301','6','A'),
+    ('302','6','B'),
+    ('303','6','C'),
+    ('401','8','A'),
+    ('402','8','B'),
+    ('403','8','C');
 SELECT * FROM SEMSEC;
-
+CREATE TABLE CLASS( 
+    Usn VARCHAR(20),
+    Ssid INT,
+    PRIMARY KEY(Usn,Ssid),
+    FOREIGN KEY(Usn) REFERENCES STUDENT(Usn),
+    CONSTRAINT FOREIGN KEY(Ssid) REFERENCES SEMSEC(Ssid) 
+);
 INSERT INTO CLASS VALUES
-('1BI16CS001','201'),
-('1BI16CS002','201'),
-('1BI16CS003','201'),
-('1BI16CS004','202'),
-('1BI16CS005','202'),
-('1BI16CS006','203'),
-('1BI16CS007','203'),
-('4SN14CS001','401'),
-('4SN14CS002','401'),
-('4SN14CS003','401'),
-('4SN14CS004','401'),
-('4SN14CS005','402'),
-('4SN14CS006','402'),
-('4SN14CS007','402'),
-('4SN14CS008','402'),
-('4SN14CS009','403'),
-('4SN14CS010','403'),
-('4SN14CS011','403');
-
+    ('1BI16CS001','201'),
+    ('1BI16CS002','201'),
+    ('1BI16CS003','201'),
+    ('1BI16CS004','202'),
+    ('1BI16CS005','202'),
+    ('1BI16CS006','203'),
+    ('1BI16CS007','203'),
+    ('4SN14CS001','401'),
+    ('4SN14CS002','401'),
+    ('4SN14CS003','401'),
+    ('4SN14CS004','401'),
+    ('4SN14CS005','402'),
+    ('4SN14CS006','402'),
+    ('4SN14CS007','402'),
+    ('4SN14CS008','402'),
+    ('4SN14CS009','403'),
+    ('4SN14CS010','403'),
+    ('4SN14CS011','403');
 SELECT * FROM CLASS;
-
+CREATE TABLE SUBJECT( 
+    Subcode VARCHAR(20),
+    Sub_title VARCHAR(30) NOT NULL,
+    Sem INT,
+    Credits INT,
+    PRIMARY KEY(Subcode) 
+);
 INSERT INTO SUBJECT VALUES
-('10CS21','C Programming','2','4'),
-('10CS82','System Modeling and Design','8','4'),
-('10CS83','Storage Area Network','8','2');
-
+    ('10CS21','C Programming','2','4'),
+    ('10CS82','System Modeling and Design','8','4'),
+    ('10CS83','Storage Area Network','8','2');
 SELECT * FROM SUBJECT;
-
+CREATE TABLE IAMARKS(
+    Usn VARCHAR(20),
+    Subcode VARCHAR(20),
+    Ssid INT,
+    Test1 INT,
+    Test2 INT,
+    Test3 INT,
+    Finalia FLOAT,
+    PRIMARY KEY(Usn,Subcode,Ssid),
+    FOREIGN KEY(Usn,Ssid) REFERENCES CLASS(Usn,Ssid),
+    FOREIGN KEY(Subcode) REFERENCES SUBJECT(Subcode) 
+);
 INSERT INTO IAMARKS VALUES
 ('4SN14CS001','10CS82','401','11','4','5',NULL),
 ('4SN14CS001','10CS83','401','12','4','3',NULL),
@@ -502,34 +561,186 @@ INSERT INTO IAMARKS VALUES
 ('4SN14CS010','10CS83','403','10','6','12',NULL),
 ('4SN14CS011','10CS82','403','14','12','1',NULL),
 ('4SN14CS011','10CS83','403','10','16','13',NULL);
-
 SELECT * FROM IAMARKS;
-
-SELECT  S.Usn, S.Sname 
-FROM    STUDENT S,SEMSEC M,CLASS C 
-WHERE   M.Sem=4 AND M.Sec='c' AND S.Usn=C.Usn AND C.Ssid=M.Ssid
-
-
-SELECT  C.Ssid AS Room_No, M.Sec AS Sec,M.Sem AS SEMESTER, 
-        SUM(CASE WHEN S.Gender = 'M' THEN 1 ELSE 0 END) AS Male, 
-        SUM(CASE WHEN S.Gender = 'F' THEN 1 ELSE 0 END) AS Female 
-FROM    CLASS C ,STUDENT S,SEMSEC M 
-WHERE   S.Usn=C.Usn AND M.Ssid=C.Ssid GROUP BY C.Ssid;
-
-
-CREATE VIEW Test_MARK AS 
+SELECT S.Usn, S.Sname 
+FROM STUDENT S,SEMSEC M,CLASS C 
+WHERE M.Sem=4 AND M.Sec='c' AND S.Usn=C.Usn AND C.Ssid=M.Ssid;
+SELECT C.Ssid AS Room_No, M.Sec AS Sec,M.Sem AS SEMESTER, 
+SUM(CASE WHEN S.Gender = 'M' THEN 1 ELSE 0 END) AS Male, 
+SUM(CASE WHEN S.Gender = 'F' THEN 1 ELSE 0 END) AS Female 
+FROM CLASS C ,STUDENT S,SEMSEC M 
+WHERE S.Usn=C.Usn AND M.Ssid=C.Ssid GROUP BY C.Ssid;
+CREATE VIEW TEST1_MARK AS 
 SELECT Test1 
 FROM IAMARKS 
 WHERE Usn='4SN14CS001';
+SELECT * FROM TEST1_MARK;
+UPDATE IAMARKS 
+SET Finalia = (GREATEST(Test1+Test2,Test2+Test3,Test3+Test1)/2);
+SELECT * FROM IAMARKS;
+SELECT I.Usn, I.Test1,I.Test2,I.Test3,I.Finalia, 
+(CASE WHEN I.Finalia>=17 AND I.Finalia<=20 THEN 'Outstanding' 
+ WHEN I.Finalia>=12 AND I.Finalia<17 THEN 'Average' 
+WHEN I.Finalia<12 THEN 'Weak' 
+ELSE 'INVALID' 
+END) AS Grade 
+FROM IAMARKS I,CLASS C,SEMSEC S 
+WHERE I.Usn=C.Usn AND C.Ssid=S.Ssid AND S.Sem=8 AND S.Sec IN ('A','B','C');
 
-SELECT * FROM test_mark;
+<h1>company database</h1>
 
-SELECT  I.Usn, I.Test1,I.Test2,I.Test3,I.Finalia,
-        (CASE WHEN I.Finalia>=17 AND I.Finalia<=20 THEN 'Outstanding'
-                WHEN I.Finalia>=12 AND I.Finalia<17 THEN 'Average' 
-                WHEN I.Finalia<12 THEN 'Weak' 
-                ELSE 'INVALID' 
-            END) AS Grade 
-FROM    IAMARKS I,CLASS C,SEMSEC S 
-WHERE   I.Usn=C.Usn AND C.Ssid=S.Ssid AND S.Sem=8 AND S.Sec IN ('A','B','C');
+-- Company Database
+CREATE TABLE DEPARTMENT( 
+    DNo INTEGER,
+    DName VARCHAR(20),
+    MgrSSN CHAR(9),
+    MgrStartDate DATE,
+    PRIMARY KEY(DNo) 
+);
+INSERT INTO DEPARTMENT VALUES
+(1,'Headquarters','888665555','1981-06-19'),
+(4,'Administration','987654321','1995-01-01'),
+(5,'Accounts','333445555','1988-05-02');
+
+SELECT * FROM DEPARTMENT;
+CREATE TABLE EMPLOYEE( 
+    SSN CHAR(9) PRIMARY KEY,
+    FName VARCHAR(20),
+    Minit CHAR,
+    LName VARCHAR(20),
+    Address VARCHAR(30),
+    Sex CHAR,
+    Salary DECIMAL(10,2),
+    SuperSSN CHAR(9),
+    DNo INTEGER,
+    FOREIGN KEY(DNo) REFERENCES DEPARTMENT(DNo) ON DELETE CASCADE 
+);
+INSERT INTO EMPLOYEE VALUES
+('123412345','Sunil','B','Kumar','Patna','M',635000,'333445555',5),
+('123451234','Hemanth','H','Patekar','Sullia','M',635000,'333445555',5),
+('123456789','John','B','Scott','Bengaluru','M',630000,'333445555',5),
+('333445555','Franklin','T','Wong','Mysuru','M',640000,'888665555',5),
+('453453453','Joyce','K','English','Chennaii','M',25000,'333445555',5),
+('666884444','Ramesh','K','Narayan','Mumbai','M',38000,'333445555',5),
+('888665555','James','E','Borg','Mangaluru','M',655000,NULL,1),
+('984598455','Anurag','V','Sharma','Kocchi','M',725000,'987654321',4),
+('987087980','Anantha','N','Krishna','Madhurai','M',22000,'987654321',4),
+('987654321','Jennifer','S','Wallace','Newdelhi','F',43000,'888665555',4),
+('987987987','Ahmad','V','Jabbar','Goa','M',825000,'987654321',4),
+('994599450','Krithika','K','Shetty','Hyderabad','F',35000,'888665555',4),
+('999887777','Alicia','J','Zeleya','Shrinagar','F',25000,'987654321',4);
+
+SELECT * FROM EMPLOYEE;
+CREATE TABLE DLOCATION( 
+    DNo INTEGER,
+    DLoc VARCHAR(20),
+    PRIMARY KEY(DNo, DLoc),
+    FOREIGN KEY (DNo) REFERENCES DEPARTMENT(DNo) ON DELETE CASCADE 
+);
+INSERT INTO DLOCATION VALUES
+(1,'Houston'),
+(4,'Stafford'),
+(5,'Bellaire'),
+(5,'Houston'),
+(5,'Sugarland');
+
+SELECT * FROM DLOCATION;
+CREATE TABLE PROJECT( 
+    PNo INTEGER,
+    PName VARCHAR(20) UNIQUE,
+    PLocation VARCHAR(20),
+    DNo INTEGER,
+    PRIMARY KEY(PNo),
+    FOREIGN KEY (DNo) REFERENCES DEPARTMENT(DNo) ON DELETE CASCADE 
+);
+INSERT INTO PROJECT VALUES
+(1,'ProductX','Bellaire',5),
+(2,'ProductY','Sugarland',5),
+(3,'ProductZ','Houston',5),
+(10,'Computerization','Stafford',4),
+(20,'Reorganization','Houston',1),
+(30,'IoT','Stafford',4);
+
+SELECT * FROM PROJECT;
+CREATE TABLE WORKS_ON( 
+    SSN CHAR(9),
+    PNo INTEGER,
+    Hours DECIMAL(3,1),
+    PRIMARY KEY(SSN,PNo),
+    FOREIGN KEY (SSN) REFERENCES EMPLOYEE(SSN) ON DELETE CASCADE,
+    FOREIGN KEY (PNo) REFERENCES PROJECT(PNo) ON DELETE CASCADE 
+);
+INSERT INTO WORKS_ON VALUES
+('123451234',20,15),
+('123456789',1,32.5),
+('123456789',2,7.5),
+('123456789',3,17.5),
+('333445555',2,10),
+('333445555',3,10),
+('333445555',10,10),
+('333445555',20,10),
+('453453453',1,20),
+('453453453',2,20),
+('666884444',3,40),
+('888665555',20,NULL),
+('984598455',30,25),
+('987087980',10,35),
+('987654321',20,15),
+('987654321',30,20),
+('987987987',10,35),
+('987987987',30,5),
+('994599450',30,5),
+('999887777',10,10),
+('999887777',30,30);
+
+SELECT * FROM WORKS_ON;
+ -- Query 1
+( 
+SELECT DISTINCT P.PNo 
+FROM PROJECT P, DEPARTMENT D, EMPLOYEE E 
+WHERE E.DNo = D.DNo 
+ AND D.MgrSSN = E.SSN 
+ AND E.LName='Scott'
+) 
+UNION 
+( 
+SELECT DISTINCT P.PNo 
+FROM PROJECT P, WORKS_ON W, EMPLOYEE E 
+WHERE P.PNo = W.PNo AND E.SSN = W.SSN AND E.LName= 'Scott'
+); 
+
+-- Query 2
+UPDATE EMPLOYEE 
+SET Salary= Salary * 1.1 
+WHERE SSN IN ( SELECT SSN 
+               FROM PROJECT P, WORKS_ON W 
+               WHERE P.PNo= W.PNo 
+               AND P.PName='IoT'
+);
+SELECT * FROM EMPLOYEE;
+-- Query 3
+SELECT SUM(E.Salary),MAX(E.Salary),MIN(E.Salary),AVG(E.Salary) 
+FROM EMPLOYEE E JOIN DEPARTMENT D ON E.DNo=D.DNo 
+WHERE D.Dname='Accounts';
+-- Query 4
+SELECT E.FName,E.LName 
+FROM EMPLOYEE E 
+WHERE NOT EXISTS ( SELECT P.PNo 
+ FROM PROJECT P 
+ WHERE P.DNo=5 
+ AND P.PNo NOT IN ( SELECT W.PNo 
+ FROM WORKS_ON W 
+ WHERE W.SSN=E.SSN ));
+
+-- For each department that has more than five employees, retrieve the department 
+--  number and the number of its employees who are making more than Rs. 6,00,000
+SELECT E.DNo, COUNT(*) 
+FROM DEPARTMENT D,EMPLOYEE E 
+WHERE D.DNo=E.DNo 
+    AND Salary> 600000 
+    AND E.DNo IN ( SELECT DNo 
+                   FROM EMPLOYEE 
+                   GROUP BY DNo 
+                   HAVING COUNT(*)>5) 
+    GROUP BY E.DNo;
 </pre>
