@@ -1,0 +1,217 @@
+<pre>
+	
+<h1>program1 or program2</h1>
+import matplotlib.pyplot as plt
+import pandas as pd
+
+cars = pd.read_csv("Datasets/mtcars.csv")
+cars.head(2)
+
+plt.hist(cars['mpg'], bins = 10, color = 'yellow', edgecolor = 'black')
+plt.title("Frequency Dist. of mpg")
+plt.savefig("Outputs/lab2__results.png")
+plt.show()
+
+<h1>program 3</h1>
+
+import pandas as pd
+import numpy as np
+import re
+
+df = pd.read_csv("Datasets/BL-Flickr-Images-Book.csv")
+df.head()
+
+df.drop(
+    ["Edition Statement", "Corporate Author", "Corporate Contributors",	"Former owner",	"Issuance type"	], 
+    axis = 1, inplace = True)
+
+df.head()
+
+df.set_index("Identifier", inplace = True)
+
+df.head()
+
+def clean_date(date):
+    if isinstance(date, str):
+        pattern = r'(\d{4})'
+        match = re.search(pattern, date)
+        if match:
+            return match.group(1)
+        else:
+            return np.nan
+    else:
+        return np.nan
+
+df["Date of Publication"] = df["Date of Publication"].apply(clean_date)
+
+def clean_title(x):
+    return x.str.strip().str.title()
+
+df["Title"] = clean_title(df["Title"])
+
+def clean_author(x):
+    return x.str.strip().str.replace("and", ",")
+
+df["Author"] = clean_author(df["Author"])
+
+df.head()
+
+<h1>program 4</h1>
+
+import pandas as pd
+from sklearn.datasets import load_iris
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+
+iris = load_iris()
+X = iris.data[:, :2]
+y = iris.target
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
+
+log_reg = LogisticRegression(C = 1e4)
+
+model = log_reg.fit(X_train, y_train)
+
+model.predict(X_test)
+
+model.score(X_test, y_test)
+
+<h1>program 5</h1>
+
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+
+# Load the Iris dataset
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+
+# Set of hyperparameters to try
+hyperparameters = [
+    {'kernel': 'rbf', 'gamma': 0.5, 'C': 0.01},
+    {'kernel': 'rbf', 'gamma': 0.5, 'C': 1},
+    {'kernel': 'rbf', 'gamma': 0.5, 'C': 10}
+]
+
+best_accuracy = 0
+best_model = None
+best_support_vectors = None
+
+# Train SVM models with different hyperparameters and find the best accuracy
+for params in hyperparameters:
+    model = SVC(kernel=params['kernel'], gamma=params['gamma'], C=params['C'], decision_function_shape='ovr')
+    model.fit(X_train, y_train)
+    accuracy = model.score(X_test, y_test)
+    support_vectors = model.n_support_.sum()
+    print(f"For hyperparameters: {params}, Accuracy: {accuracy}, Total Support Vectors: {support_vectors}")
+    if accuracy > best_accuracy:
+        best_accuracy = accuracy
+        best_model = model
+        best_support_vectors = support_vectors
+
+
+print("\nBest accuracy:", best_accuracy)
+print("Total support vectors on test data:", best_support_vectors)
+
+<h1>program 5b</h1>
+
+import numpy as np
+from sklearn import datasets
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+
+iris = datasets.load_iris()
+
+X = iris.data
+y = iris.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+
+hyperparams = [
+    {'kernel': 'rbf','gamma':0.5,'C':0.01},
+    {'kernel': 'rbf','gamma':0.5,'C':1},
+    {'kernel': 'rbf','gamma':0.5,'C':10}
+]
+
+results=[]
+for hyperparam in hyperparams:
+    clf = SVC(**hyperparam, decision_function_shape='ovr')
+    clf.fit(X_train, y_train)
+    y_pred = clf.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    n_support_vectors = clf.n_support_
+    results.append((hyperparam, accuracy, n_support_vectors))
+
+
+    for result in results:
+      print("Hyperparameters:", result[0])
+    print("Accuracy:", result[1])
+    print("Number of support vectors:", result[2])
+    print()
+
+<h1>program 6</h1>
+
+import pandas as pd
+from sklearn import tree
+from sklearn.preprocessing import LabelEncoder
+from sklearn.tree import DecisionTreeClassifier
+from six import StringIO
+
+from warnings import filterwarnings
+filterwarnings("ignore")
+
+data = pd.read_excel("Datasets/decisiontree.xlsx")
+data.head()
+
+X = data.iloc[:,:-1]
+X.head()
+
+y = data.iloc[:,-1]
+y.head()
+
+le_Price = LabelEncoder()
+X.Price = le_Price.fit_transform(X.Price)
+
+le_Maintenance = LabelEncoder()
+X.Maintenance = le_Maintenance.fit_transform(X.Maintenance)
+
+le_Capacity = LabelEncoder()
+X.Capacity = le_Capacity.fit_transform(X.Capacity)
+
+le_Airbag = LabelEncoder()
+X.Airbag = le_Airbag.fit_transform(X.Airbag)
+
+X.head()
+
+le_Profitable = LabelEncoder()
+y = le_Profitable.fit_transform(y)
+
+print(y)
+
+classifier = DecisionTreeClassifier()
+classifier.fit(X, y)
+
+def labelEncoder(inputList):
+    inputList[0] = le_Price.transform([inputList[0]])[0]
+    inputList[1] = le_Maintenance.transform([inputList[1]])[0]
+    inputList[2] = le_Capacity.transform([inputList[2]])[0]
+    inputList[3] = le_Airbag.transform([inputList[3]])[0]
+    return [inputList]
+
+inp = ['Low', 'Low', 2, 'No']
+temp = inp.copy()
+
+inp1 = labelEncoder(inp)
+y_pred = classifier.predict(inp1)
+
+print("For input {0}, we obtained {1[0]}".format(temp, le_Profitable.inverse_transform(y_pred)))
+
+</pre>
