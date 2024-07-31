@@ -1,0 +1,108 @@
+<pre>
+	
+	<h1>program1</h1>
+
+import numpy as np
+import pandas as pd
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, classification_report
+import matplotlib.pyplot as plt
+iris = datasets.load_iris()
+X = iris.data
+y = iris.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+model = LogisticRegression()
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+cm = confusion_matrix(y_test, y_pred, labels=model.classes_)
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
+disp.plot(cmap=plt.cm.Blues)
+plt.title('Confusion Matrix - Logistic Regression on Iris Dataset')
+plt.show()
+print("Performance :")
+print(classification_report(y_test, y_pred))
+
+
+<h1>program2</h1>
+
+import numpy as np
+import pandas as pd
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, classification_report
+import matplotlib.pyplot as plt
+cancer = datasets.load_breast_cancer()
+X = cancer.data
+y = cancer.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+model = DecisionTreeClassifier(random_state=42)
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+cm = confusion_matrix(y_test, y_pred, labels=model.classes_)
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
+disp.plot(cmap=plt.cm.Blues)
+plt.title('Confusion Matrix - Decision Tree on Breast Cancer Dataset')
+plt.show()
+
+from os import system
+from sklearn.tree import export_graphviz
+from graphviz import Source
+from sklearn import tree
+plt.figure(figsize=(40,20)) # customize according to the size of your tree
+_ = tree.plot_tree(model, feature_names = cancer.feature_names[2:])
+plt.show()
+print("Performance :")
+print(classification_report(y_test, y_pred))
+
+<h1>program3</h1>
+
+
+import numpy as np
+import pandas as pd
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, ,
+classification_report
+import matplotlib.pyplot as plt
+wine = datasets.load_wine()
+X = wine.data
+y = wine.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+model = SVC(kernel='linear', random_state=42)
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+cm = confusion_matrix(y_test, y_pred, labels=model.classes_)
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
+disp.plot(cmap=plt.cm.Blues)
+plt.title('Confusion Matrix - SVM on Wine Dataset')
+plt.show()
+
+
+<h1>program4</h1>
+
+import numpy as np
+import pandas as pd
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, classification_report
+import matplotlib.pyplot as plt
+digits = datasets.load_digits()
+X = digits.data
+y = digits.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+model = RandomForestClassifier(random_state=42)
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+cm = confusion_matrix(y_test, y_pred, labels=model.classes_)
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model.classes_)
+disp.plot(cmap=plt.cm.Blues)
+plt.title('Confusion Matrix - Random Forest on Digits Dataset')
+plt.show()
+print("Performance :")
+print(classification_report(y_test, y_pred))
+</pre>
