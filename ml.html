@@ -107,6 +107,64 @@ if ans==0:
 else:
     print("yes")
 
+<h1>program3b</h1>
+
+import csv
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn import tree
+from sklearn.preprocessing import LabelEncoder
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+from six import StringIO
+data = pd.read_csv('Playtennis.csv')
+print("The first 5 values of data is \n",data.head())
+
+X = data.iloc[:,1:-1]
+print("\nThe first 5 values of Train data is \n",X.head())
+y = data.iloc[:,-1]
+print("\nThe first 5 values of Train output is \n",y.head())
+
+le_outlook = LabelEncoder()
+X.Outlook = le_outlook.fit_transform(X.Outlook)
+le_Temperature = LabelEncoder()
+X.Temp = le_Temperature.fit_transform(X.Temp)
+le_Humidity = LabelEncoder()
+X.Humidity = le_Humidity.fit_transform(X.Humidity)
+le_Windy = LabelEncoder()
+X.Wind = le_Windy.fit_transform(X.Wind)
+print("\nNow the Train data is")
+print(X.head())
+le_PlayTennis = LabelEncoder()
+y = le_PlayTennis.fit_transform(y)
+print("\nNow the Train data is\n",y)
+classifier = DecisionTreeClassifier()
+classifier.fit(X,y)
+def labelEncoderForInput(list1):
+  list1[0] = le_outlook.transform([list1[0]])[0]
+  list1[1] = le_Temperature.transform([list1[1]])[0]
+  list1[2] = le_Humidity.transform([list1[2]])[0]
+  list1[3] = le_Windy.transform([list1[3]])[0]
+  return [list1]
+
+#inp = ["Rain","Mild","High","Weak"]
+inp=["Rain","Cool","High","Weak"]
+inp1 = inp.copy()
+pred1 = labelEncoderForInput(inp)
+y_pred = classifier.predict(pred1)
+print(inp1)
+print("OUTPUT IS")
+print(y_pred)
+print("\nfor input {0}, we obtain {1}".format(inp1,
+le_PlayTennis.inverse_transform(y_pred)))
+y_pred_all = classifier.predict(X)
+cm = confusion_matrix(y, y_pred_all)
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=le_PlayTennis.classes_)
+
+disp.plot(cmap=plt.cm.Blues)
+plt.title('Confusion Matrix')
+plt.show()
+	
 <h1>program 4</h1>
 
 import numpy as np
@@ -299,24 +357,27 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
+from sklearn import metrics
 import pandas as pd
 import numpy as np
 from sklearn import datasets
-
 iris=datasets.load_iris()
 iris_data=iris.data
 iris_labels=iris.target
 print(iris_data)
-
-x_train, x_test, y_train, y_test=(train_test_split(iris_data, iris_labels, test_size=0.20))
+x_train, x_test, y_train, y_test=(train_test_split(iris_data, iris_labels,
+test_size=0.20))
 classifier=KNeighborsClassifier(n_neighbors=6)
 classifier.fit(x_train, y_train)
 y_pred=classifier.predict(x_test)
-
+print(y_pred)
 print("accuracy is")
 print(classification_report(y_test, y_pred))
 print('Confusion Matrix')
-print(confusion_matrix(y_test,y_pred))
+cm = confusion_matrix(y_test,y_pred)
+print(cm)
+disp = metrics.ConfusionMatrixDisplay(confusion_matrix=cm)
+disp.plot()
 
 <h1>program 9</h1>
 
